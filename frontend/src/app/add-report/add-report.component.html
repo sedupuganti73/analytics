@@ -1,0 +1,89 @@
+<div class="example-container">
+    <h1 mat-dialog-title>Add Report</h1>
+    <form class="example-form" #form="ngForm" autocomplete="off">
+        
+            <mat-form-field class="example-full-width" color="accent">
+              <input matInput #reportName="ngModel" appCommandValidator placeholder="Report Name" [(ngModel)]="name" name="name" required>
+              <mat-hint align="start"><strong>Name of report</strong> </mat-hint>
+              
+              <mat-error *ngIf="reportName.invalid && (reportName.dirty || reportName.touched) && reportName.errors.forbiddenCommand">
+                    Comand cannot start with <strong>open</strong>.
+              </mat-error>  
+              <mat-error *ngIf="reportName.invalid && (reportName.dirty || reportName.touched) && reportName.errors.required">
+                    Name is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          
+            <br><br>
+
+            <table class="example-full-width" color="accent" cellspacing="10"><tr>
+              <td>
+                  <mat-form-field color="accent">
+                  <input matInput #dbUser="ngModel" placeholder="db username" appUrlValidator  [(ngModel)]="dbUsername" name="dbUsername" required>
+                  <mat-hint align="start"><strong >Database username</strong> </mat-hint>
+                  <mat-error *ngIf="dbUser.invalid && (dbUser.dirty || dbUser.touched) && dbUser.errors.forbiddenCommand">
+                          Command has to be a <strong>relative URL</strong>.
+                    </mat-error>  
+                  <mat-error *ngIf="dbUser.invalid && (dbUser.dirty || dbUser.touched) && dbUser.errors.required">
+                          DB username is <strong>required</strong>
+                    </mat-error>
+                  </mat-form-field>  
+              </td>
+              <td>
+                  <mat-form-field color="accent">
+                  <input matInput type="password" #dbPasswd="ngModel" placeholder="db password" appUrlValidator  [(ngModel)]="dbPassword" name="dbPassword" required>
+                  <mat-hint align="start"><strong >Database password</strong> </mat-hint>
+             
+                  <mat-error *ngIf="dbPasswd.invalid && (dbPasswd.dirty || dbPasswd.touched) && dbPasswd.errors.required">
+                          DB password is <strong>required</strong>
+                    </mat-error>
+                  </mat-form-field>
+              </td>
+            </tr>
+            </table>    
+              
+              <br><br>    
+
+              <mat-form-field class="example-full-width" color="accent"  >
+                  <textarea matInput placeholder="Query" [(ngModel)]="query" name="query" required></textarea>
+                  <mat-hint align="start"><strong >Query to generate report</strong> </mat-hint>
+                  
+                </mat-form-field>
+              <br><br>
+              
+              <table class="example-full-width" color="accent" cellspacing="10"><tr>
+                  <td>
+                      <mat-form-field color="accent">
+                      
+                          <mat-select #dbType="ngModel" placeholder="Type"  [(ngModel)]="type" name="type">
+                              <mat-option *ngFor="let type of dbTypes" [value]="type.value">
+                                {{ type.viewValue }}
+                              </mat-option>
+                            </mat-select>  
+                            <mat-hint align="start"><strong >DB Type</strong> </mat-hint>
+                      
+                      </mat-form-field>  
+                  </td>
+                  <td>
+                      <mat-form-field color="accent">
+                      <input matInput #creator="ngModel" placeholder="Created By" appUrlValidator  [(ngModel)]="createdBy" name="createdBy" required>
+                      <mat-hint align="start"><strong >Report Creator user Id</strong> </mat-hint>
+                 
+                      <mat-error *ngIf="creator.invalid && (creator.dirty || creator.touched) && creator.errors.required">
+                              Creator is <strong>required</strong>
+                        </mat-error>
+                      </mat-form-field>
+                  </td>
+                </tr>
+                </table>    
+                
+                <br><br>
+
+              <button mat-raised-button [disabled]="form.invalid" (click)="addReport()" color="primary">
+                  <mat-icon aria-label="Submit">add</mat-icon>&nbsp;Add Report
+              </button>  
+
+      </form>
+
+     
+  </div>

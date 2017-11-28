@@ -1,0 +1,64 @@
+<div class="example-container">
+  <h1 mat-dialog-title>Add Report Column</h1>
+  <form class="example-form" #form="ngForm" autocomplete="off">
+      
+          <mat-form-field class="example-full-width" color="accent">
+            <input matInput #columnName="ngModel" appCommandValidator placeholder="Column Name" [(ngModel)]="name" name="name" required>
+            <mat-hint align="start"><strong>Name of column</strong> </mat-hint>
+            
+            <mat-error *ngIf="columnName.invalid && (columnName.dirty || columnName.touched) && columnName.errors.required">
+                  Name is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        
+          <br><br>
+
+          <mat-form-field class="example-full-width" color="accent">
+            <input matInput #columnLabel="ngModel" appCommandValidator placeholder="Column Label" [(ngModel)]="label" name="label" required>
+            <mat-hint align="start"><strong>Label of column</strong> </mat-hint>
+            
+            <mat-error *ngIf="columnLabel.invalid && (columnLabel.dirty || columnLabel.touched) && columnLabel.errors.required">
+                  label is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        
+          <br><br>
+            
+          <mat-form-field class="example-full-width" color="accent">
+            
+            <mat-select #columnType="ngModel" placeholder="Column Type"  [(ngModel)]="type" name="type">
+              <mat-option *ngFor="let type of columnTypes" [value]="type.value">
+                {{ type.viewValue }}
+              </mat-option>
+            </mat-select>  
+            
+            <mat-hint align="start"><strong>Type of column</strong> </mat-hint>
+            
+            <mat-error *ngIf="columnType.invalid && (columnType.dirty || columnType.touched) && columnType.errors.required">
+                  Type is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        
+          <br><br>
+               
+
+          <mat-form-field class="example-full-width" color="accent">
+            <input matInput #columnFormat="ngModel" appCommandValidator placeholder="Column Format" [(ngModel)]="format" name="format" required>
+            <mat-hint align="start"><strong>Format of column</strong> </mat-hint>
+            
+            <mat-error *ngIf="columnFormat.invalid && (columnFormat.dirty || columnFormat.touched) && columnFormat.errors.required">
+                  Format is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        
+          <br><br>
+               
+
+            <button mat-raised-button [disabled]="form.invalid" (click)="addColumn()" color="primary">
+                <mat-icon aria-label="Submit">add</mat-icon>&nbsp;Add Column
+            </button>  
+
+    </form>
+
+   
+</div>
