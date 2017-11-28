@@ -12,6 +12,8 @@ import { AddReportComponent } from './add-report/add-report.component';
 import { FormsModule }   from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AddColumnComponent } from './add-column/add-column.component';
+import { DatabasesComponent } from './databases/databases.component';
+import { AddDatabaseComponent } from './add-database/add-database.component';
 
 
 @NgModule({
@@ -21,7 +23,9 @@ import { AddColumnComponent } from './add-column/add-column.component';
     ReportColumnsComponent,
     HistoryComponent,
     AddReportComponent,
-    AddColumnComponent
+    AddColumnComponent,
+    DatabasesComponent,
+    AddDatabaseComponent
   ],
   imports: [
     BrowserAnimationsModule,

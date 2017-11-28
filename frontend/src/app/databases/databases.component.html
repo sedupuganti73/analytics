@@ -1,0 +1,86 @@
+<mat-toolbar color="warn">
+  <img src="/assets/bnsf-logo.png" style="height:85%"/>
+  <span class="site-title">Force Analytics</span>
+  <span class="page-title"><mat-icon style="vertical-align: middle;">view_column</mat-icon>&nbsp; Report Columns</span>
+  
+ 
+</mat-toolbar>
+
+<mat-card class="main-container">
+   Registered Databases
+<mat-card-title color="secondary">
+  <!--mat-chip-list>
+  <mat-chip [routerLink]="['/sites']" color="primary" style="cursor:pointer" selected="true">
+      Registered sites
+  </mat-chip>
+  
+  <mat-chip  >
+      Registered Commands
+  </mat-chip>
+  </mat-chip-list-->
+
+</mat-card-title>
+<button mat-raised-button  (click)="addColumn()" color="primary">
+  <mat-icon aria-label="Add Column">add</mat-icon>&nbsp; Add Column
+</button>
+
+
+<br><br>
+
+<div class="example-container mat-elevation-z8">
+      <mat-progress-bar *ngIf="loading"
+          class="example-margin"
+          color="primary"
+          mode="indeterminate">
+      </mat-progress-bar>
+      <mat-table #table [dataSource]="datasource">
+    
+        <!--- Note that these columns can be defined in any order.
+              The actual rendered columns are set as a property on the row definition" -->
+    
+        
+        <ng-container matColumnDef="name">
+          <mat-header-cell *matHeaderCellDef> NAME </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+        </ng-container>
+    
+        <ng-container matColumnDef="label">
+            <mat-header-cell *matHeaderCellDef> LABEL </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.label}} </mat-cell>
+          </ng-container>  
+
+        <ng-container matColumnDef="type">
+          <mat-header-cell *matHeaderCellDef> TYPE </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.type=='c'?'Currency':'Date'}} </mat-cell>
+        </ng-container>
+    
+        <ng-container matColumnDef="format">
+          <mat-header-cell *matHeaderCellDef> FORMAT </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.format}} </mat-cell>
+        </ng-container>  
+     
+        <ng-container matColumnDef="actions">
+          <mat-header-cell *matHeaderCellDef> ACTIONS </mat-header-cell>
+          <mat-cell *matCellDef="let element" class="button-row"> 
+                
+                    <button mat-mini-fab color="accent" matTooltip="edit column">
+                        <mat-icon >create</mat-icon>
+                      </button>    
+                      <button mat-mini-fab color="warn" matTooltip="delete column" (click)="delete(element.columnId)">
+                          <mat-icon >delete_forever</mat-icon>
+                        </button>     
+          </mat-cell>
+        </ng-container>  
+     
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      </mat-table>
+    </div>
+
+
+
+  <mat-card-footer > &copy; BNSF Railways</mat-card-footer>
+  
+
+</mat-card>
