@@ -12,3 +12,9 @@
     height:100%;
     width:98%;
 }
+
+.mat-card-footer{
+    position: fixed;
+    bottom: 50px;
+    left: 45%;
+}
