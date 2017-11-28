@@ -94,7 +94,7 @@ public class Report {
 	}
 	
 	public String getQueryString() {
-		return queryString;
+		return new String(query);
 	}
 	public void setQueryString(String queryString) {
 		this.query = queryString.getBytes();
