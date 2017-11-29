@@ -14,7 +14,9 @@ buildscript {
 	}
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-		
+		classpath('com.bnsf.gradle.plugins:bnsf-autoconfig-gradle-plugin:1.0')
+		classpath('com.bnsf.gradle.plugins:bnsf-cbp-general-gradle-plugin:1.0')
+		classpath('com.bnsf.gradle.plugins:bnsf-platform-build-gradle-plugin:1.2.0.RELEASE')
 		
 	}
 }
