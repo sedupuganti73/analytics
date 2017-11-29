@@ -7,7 +7,7 @@ import { ReportsComponent } from './reports/reports.component';
 import { ReportColumnsComponent } from './report-columns/report-columns.component';
 import { HistoryComponent } from './history/history.component';
 import { AppRoutingModule } from './app-routing.module';
-import {MatToolbarModule,MatSelectModule,MatTooltipModule, MatProgressBarModule, MatDialogModule, MatCardModule, MatButtonModule, MatIconModule, MatFormFieldModule, MatInputModule, MatTableModule} from '@angular/material';
+import {MatToolbarModule, MatSidenavModule, MatListModule, MatSelectModule,MatTooltipModule, MatProgressBarModule, MatDialogModule, MatCardModule, MatButtonModule, MatIconModule, MatFormFieldModule, MatInputModule, MatTableModule} from '@angular/material';
 import { AddReportComponent } from './add-report/add-report.component';
 import { FormsModule }   from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -32,6 +32,8 @@ import { AddDatabaseComponent } from './add-database/add-database.component';
     FormsModule,
     BrowserModule,
     AppRoutingModule,
+    MatSidenavModule,
+    MatListModule,
     MatProgressBarModule,
     MatTooltipModule,
     MatToolbarModule,
@@ -45,7 +47,7 @@ import { AddDatabaseComponent } from './add-database/add-database.component';
     MatSelectModule,
     HttpModule
   ],
-  entryComponents: [AddReportComponent,AddColumnComponent],
+  entryComponents: [AddReportComponent,AddColumnComponent,AddDatabaseComponent],
   providers: [],
   bootstrap: [AppComponent]
 })

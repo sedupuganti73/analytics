@@ -1,0 +1,20 @@
+.page-title{
+    margin-left: auto;
+}
+
+.site-title {
+    margin-left: 20px;
+    
+}
+
+.main-container {
+    position: fixed;
+    height:100%;
+    width:98%;
+}
+
+.mat-card-footer{
+    position: fixed;
+    bottom: 50px;
+    left: 45%;
+}

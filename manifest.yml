@@ -2,4 +2,3 @@
 applications:
 - name: sf-analytics
   memory: 512M
-  instances: 1

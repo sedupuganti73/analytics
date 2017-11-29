@@ -1,1 +1,33 @@
-<router-outlet></router-outlet>
+<mat-sidenav-container class="example-container">
+    <mat-sidenav mode="side" [opened]="showNav" mat-divider>
+            <nav>
+                <h3 class="menu-title">Menu</h3>
+                <mat-nav-list>
+                        <mat-list-item (click)="showNav=false;title='Reports'" [routerLink]="['/reports']"  routerLinkActive="active"><mat-icon style="vertical-align: middle;">report</mat-icon>&nbsp;Reports</mat-list-item>
+                        <mat-divider></mat-divider>
+                        <mat-list-item (click)="showNav=false;title='Data Sources'"  [routerLink]="['/datasources']"  routerLinkActive="active"><mat-icon style="vertical-align: middle;">cloud</mat-icon>&nbsp;Data Sources</mat-list-item>
+                        <mat-divider></mat-divider>
+                      </mat-nav-list>
+            </nav>
+           
+    </mat-sidenav>
+    <mat-sidenav-content>
+            <mat-toolbar color="warn">
+                    <mat-icon *ngIf="!showNav" class="demo-toolbar-icon" style="cursor:pointer" (click)="showNav=true">menu</mat-icon>&nbsp;
+                    <mat-icon *ngIf="showNav" class="demo-toolbar-icon" style="cursor:pointer" (click)="showNav=false">keyboard_backspace</mat-icon>&nbsp;
+                    
+                    <img src="/assets/bnsf-logo.png" style="height:85%"/>
+                    <span class="site-title">Force Analytics</span>
+                    <!--span class="page-title"><mat-icon style="vertical-align: middle;">report</mat-icon>&nbsp; {{title}}</span-->
+                    
+                   
+                  </mat-toolbar>
+        <div  (click)="showNav=false">
+                <router-outlet></router-outlet>
+        </div>          
+        
+        
+
+        <mat-card-footer > &copy; BNSF Railways</mat-card-footer>          
+    </mat-sidenav-content>
+</mat-sidenav-container>

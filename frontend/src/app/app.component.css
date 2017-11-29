@@ -1,0 +1,49 @@
+.page-title{
+    margin-left: auto;
+}
+
+.site-title {
+    margin-left: auto;
+    
+}
+
+.main-container {
+    position: fixed;
+    height:100%;
+    width:98%;
+}
+
+.mat-card-footer{
+    position: fixed;
+    bottom: 50px;
+    left: 45%;
+}
+
+.mat-drawer{
+    height: 100%;
+    position: fixed;
+    border-right: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.menu-title {
+    margin: 0;
+    padding: 21px;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.32);
+}
+
+mat-list-item.mat-list-item.active {
+    color: #f44336;
+    background-color: rgba(0,0,0,.87);
+}
+
+.mat-list, .mat-nav-list, .mat-selection-list {
+    padding-top:0;
+}
+
+
+.mat-card-footer{
+    position: fixed;
+    bottom: 50px;
+    left: 45%;
+}
