@@ -1,30 +1,8 @@
-<mat-toolbar color="warn">
-    <img src="/assets/bnsf-logo.png" style="height:85%"/>
-    <span class="site-title">Force Analytics</span>
-    <span class="page-title"><mat-icon style="vertical-align: middle;">view_column</mat-icon>&nbsp; Report Columns</span>
-    
-   
-  </mat-toolbar>
-  
-  <mat-card class="main-container">
-    <a [routerLink]="['/reports']"  style="text-decoration:none; color: #f44336;">Registered Reports</a>
-    / Registered Columns
-  <mat-card-title color="secondary">
-    <!--mat-chip-list>
-    <mat-chip [routerLink]="['/sites']" color="primary" style="cursor:pointer" selected="true">
-        Registered sites
-    </mat-chip>
-    
-    <mat-chip  >
-        Registered Commands
-    </mat-chip>
-    </mat-chip-list-->
-  
-  </mat-card-title>
-  <button mat-raised-button  (click)="addColumn()" color="primary">
-    <mat-icon aria-label="Add Column">add</mat-icon>&nbsp; Add Column
-  </button>
-  
+<mat-card class="main-container">
+    <a [routerLink]="['/reports']"  style="text-decoration:none; color: #f44336;">Registered Reports</a> &nbsp;
+    / &nbsp; <button mat-mini-fab (click)="addColumn()" color="primary"  matTooltip="Add Column">
+        <mat-icon >add</mat-icon>
+      </button>  &nbsp;   Registered Columns
   
   <br><br>
   
@@ -80,9 +58,5 @@
       </div>
   
 
-
-    <mat-card-footer > &copy; BNSF Railways</mat-card-footer>
-    
-  
   </mat-card>
   
