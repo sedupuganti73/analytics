@@ -21,6 +21,11 @@ public class ReportsService {
 		return reportRepository.findAll();
 	}
 	
+	public Report getReport(Long reportId)  {
+		return reportRepository.findOne(reportId);
+	}
+	
+	
 	public void addReport(Report report) {
 		reportRepository.save(report);
 	}

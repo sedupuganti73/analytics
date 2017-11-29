@@ -9,8 +9,17 @@ export class AnalyticsService {
   getReports():Observable<Response> {
     return this.http.get(this.prefix+'/reports/');
   }
-  addReport( name:string, dbUsername:string, dbPassword:string, query:string, type:string, createdBy:string ):Observable<Response> {
-    return this.http.post(this.prefix+'/reports/create',{name:name, dbUsername:dbUsername, dbPassword:dbPassword, queryString: query , label:'', type: type, createdBy:createdBy});
+
+  getReport(reportId:number):Observable<Response> {
+    return this.http.get(this.prefix+'/reports/'+reportId);
+  }
+
+  addReport( name:string, query:string, dataSource:number, createdBy:string ):Observable<Response> {
+    return this.http.post(this.prefix+'/reports/',{name:name,  query: query , label:'', dataSource: dataSource, createdBy:createdBy});
+  }
+
+  updateReport( reportId:number, name:string, query:string, dataSource:number, createdBy:string ):Observable<Response> {
+    return this.http.post(this.prefix+'/reports/',{reportId: reportId, name:name,  query: query , label:'', dataSource: dataSource, createdBy:createdBy});
   }
 
   deleteReport ( reportId: number) {

@@ -1,5 +1,6 @@
 package com.bnsf.analytics.controllers;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bnsf.analytics.model.Report;
+import com.bnsf.analytics.service.DataSourceService;
 import com.bnsf.analytics.service.ReportsService;
 
 import groovy.util.logging.Log4j;
@@ -23,16 +25,33 @@ public class ReportsController {
 	
 		@Autowired
 		private ReportsService reportsService;
+		
+		@Autowired
+		private DataSourceService dsService;
 	
 	 	@RequestMapping( "/")
 	    public List<Report> getReports() {
 	 		return reportsService.getReports();
 	    }
 	 	
-	 	@RequestMapping( value = "/create", method = RequestMethod.POST)
+	 	@RequestMapping( "/{reportId}")
+	    public Report getReport(@PathVariable("reportId") Long reportId) {
+	 		return reportsService.getReport(reportId);
+	    }
+	 	
+	 	
+	 	@RequestMapping( value = "/", method = RequestMethod.POST)
 	    public void addReport(
-	    			@RequestBody Report report
+	    			@RequestBody LinkedHashMap<String, String> reportObj
 	    		) {
+	 		Report report  = new Report();
+	 		if(reportObj.get("reportId")!=null) {
+	 			report.setReportId(Long.parseLong( reportObj.get("reportId"))); 
+	 		}
+	 		report.setDataSource(dsService.getDataSource(Long.parseLong( reportObj.get("dataSource"))) );
+	 		report.setName(reportObj.get("name"));
+	 		report.setQuery(reportObj.get("query"));
+	 		report.setCreatedBy(reportObj.get("createdBy"));
 	 		reportsService.addReport(report);
 	 		return;
 	    }

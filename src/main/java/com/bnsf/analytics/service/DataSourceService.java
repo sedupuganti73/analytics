@@ -21,6 +21,10 @@ public class DataSourceService {
 		return dsRepository.findAll();
 	}
 	
+	public DataSource getDataSource(long dsId) {
+		return dsRepository.findOne(dsId);
+	}
+	
 	public void addDataSource(DataSource dataSource ) {
 		dsRepository.save(dataSource);
 	}

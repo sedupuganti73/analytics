@@ -1,7 +1,7 @@
 
 <mat-card style="min-height:500px" class="main-container">
 
-    <button mat-mini-fab (click)="addReport()" color="primary"  matTooltip="Add Report">
+    <button mat-mini-fab (click)="addEditReport()" color="primary"  matTooltip="Add Report">
         <mat-icon >add</mat-icon>
       </button>  &nbsp;
   Registered Reports 
@@ -28,22 +28,16 @@
         </ng-container>
     
        
-        <ng-container matColumnDef="dbUsername">
-          <mat-header-cell *matHeaderCellDef> DB USERNAME </mat-header-cell>
-          <mat-cell *matCellDef="let element"> {{element.dbUsername}} </mat-cell>
-        </ng-container>
-
-
 
         <ng-container matColumnDef="query">
             <mat-header-cell *matHeaderCellDef> QUERY </mat-header-cell>
-            <mat-cell *matCellDef="let element"> {{element.queryString}} </mat-cell>
+            <mat-cell *matCellDef="let element"> {{element.query}} </mat-cell>
           </ng-container>
       
        
         <ng-container matColumnDef="type">
           <mat-header-cell *matHeaderCellDef> TYPE </mat-header-cell>
-          <mat-cell *matCellDef="let element"> {{element.type=='r'?'Revenue':element.type=='s'?'SPM':'Data Warehouse'}} </mat-cell>
+          <mat-cell *matCellDef="let element"> {{element.dataSource.name}} </mat-cell>
         </ng-container>
     
         <ng-container matColumnDef="createdBy">
@@ -61,12 +55,12 @@
                   <button mat-mini-fab style="background-color: #69f0ae"  matTooltip="history">
                       <mat-icon >history</mat-icon>
                     </button>    
-                    <button mat-mini-fab color="accent" matTooltip="edit report">
-                        <mat-icon >create</mat-icon>
-                      </button>    
-                      <button mat-mini-fab color="warn" matTooltip="delete report" (click)="delete(element.reportId)">
-                          <mat-icon >delete_forever</mat-icon>
-                        </button>     
+                  <button mat-mini-fab color="accent" matTooltip="edit report" (click)="addEditReport(element.reportId)">
+                      <mat-icon >create</mat-icon>
+                    </button>    
+                  <button mat-mini-fab color="warn" matTooltip="delete report" (click)="delete(element.reportId)">
+                      <mat-icon >delete_forever</mat-icon>
+                    </button>     
           </mat-cell>
         </ng-container>  
      

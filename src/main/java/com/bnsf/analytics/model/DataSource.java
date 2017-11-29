@@ -1,10 +1,14 @@
 package com.bnsf.analytics.model;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -19,6 +23,8 @@ public class DataSource {
 	@Column(name = "CONNECTION_URL", nullable = false)
 	private String url;
 	
+	//@OneToMany(mappedBy = "dataSource", fetch = FetchType.LAZY)
+	//private List<Report> reports;
 
 	public long getDsId() {
 		return dsId;

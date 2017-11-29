@@ -7,38 +7,47 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.bnsf.analytics.service.DataSourceService;
 
 @Entity
 @Table(name="DATA_SET_DEFF", schema = "NP_CRM1")
 public class Report {
+	
+	@Transient
+	@Autowired
+	DataSourceService dsService;
+	
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "REPORT_ID", nullable = false)
+	@Column(name = "REPORT_ID", nullable = false, unique = true)
 	@Id
 	private long reportId;
 	
 	private String name;
 	
-	@Column(name = "DB_USER", nullable = false)
-	private String dbUsername;
-	
-	@Column(name = "DB_PASSWD", nullable = false)
-	private String dbPassword;
+	//@Lob
+	//@Column(length=100000)
+	//private String query;
 	
 	@Lob
-	@Column(length=100000)
-	private byte[] query;
-	
-	@Transient
-	private String queryString;
+	private String query;
 	
 	
 	private String label;
 	
-	@Column(name = "DB_TYPE", nullable = false)
-	private Character type;
+	@ManyToOne
+	@JoinColumn(name="DATASOURCE_ID")
+	private DataSource dataSource;
+	
 	
 	@Column(name = "CREATED_BY", nullable = false)
 	private String createdBy;
@@ -56,36 +65,14 @@ public class Report {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getDbUsername() {
-		return dbUsername;
-	}
-	public void setDbUsername(String dbUsername) {
-		this.dbUsername = dbUsername;
-	}
-	public String getDbPassword() {
-		return dbPassword;
-	}
-	public void setDbPassword(String dbPassword) {
-		this.dbPassword = dbPassword;
-	}
-	public byte[] getQuery() {
-		return query;
-	}
-	public void setQuery(byte[] query) {
-		this.query = query;
-	}
+	
 	public String getLabel() {
 		return label;
 	}
 	public void setLabel(String label) {
 		this.label = label;
 	}
-	public Character getType() {
-		return type;
-	}
-	public void setType(Character type) {
-		this.type = type;
-	}
+	
 	public String getCreatedBy() {
 		return createdBy;
 	}
@@ -93,11 +80,18 @@ public class Report {
 		this.createdBy = createdBy;
 	}
 	
-	public String getQueryString() {
-		return new String(query);
+	public String getQuery() {
+		return query;
 	}
-	public void setQueryString(String queryString) {
-		this.query = queryString.getBytes();
-		this.queryString = queryString;
+	public void setQuery(String queryString) {
+		this.query = queryString;
 	}
+	
+	public DataSource getDataSource() {
+		return dataSource;
+	}
+	public void setDataSource(DataSource dataSource) {
+		this.dataSource = dataSource;
+	}
+
 }

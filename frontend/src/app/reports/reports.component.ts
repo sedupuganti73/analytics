@@ -14,7 +14,7 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 })
 export class ReportsComponent implements OnInit {
   public datasource:DataSource<Report> = new ReportsDataSource() ;
-  public displayedColumns = [ 'name', 'dbUsername', 'query', 'type', 'createdBy', 'actions'];
+  public displayedColumns = [ 'name', 'query', 'type', 'createdBy', 'actions'];
   public loading:boolean=true;
   
   constructor(private analyticsService:AnalyticsService, public dialog: MatDialog) { }
@@ -36,10 +36,19 @@ export class ReportsComponent implements OnInit {
       })
   }
 
-  addReport():void {
-    let dialogRef = this.dialog.open(AddReportComponent, {
-      width: '500px'
-    });
+  
+  addEditReport(reportId:string):void {
+    let dialogRef;
+    if(reportId) {
+       dialogRef = this.dialog.open(AddReportComponent, {
+        width: '500px', data:{reportId:reportId}
+      });
+    } else {
+       dialogRef = this.dialog.open(AddReportComponent, {
+        width: '500px'
+      });
+    }
+    
 
     dialogRef.afterClosed().subscribe(refreshValues => {
       console.log('The dialog was closed '+refreshValues);
