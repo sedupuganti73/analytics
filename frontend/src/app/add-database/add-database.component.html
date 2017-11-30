@@ -38,10 +38,12 @@
                  
   
   
-              <button mat-raised-button [disabled]="form.invalid" (click)="addDB()" color="primary">
+              <button *ngIf="dsId!=null" mat-raised-button [disabled]="form.invalid" (click)="editDB()" color="primary">
+                  <mat-icon aria-label="Submit">create</mat-icon>&nbsp;Update Database
+              </button>  
+              <button *ngIf="dsId==null" mat-raised-button [disabled]="form.invalid" (click)="addDB()" color="primary">
                   <mat-icon aria-label="Submit">add</mat-icon>&nbsp;Add Database
               </button>  
-  
       </form>
   
      

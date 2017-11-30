@@ -37,10 +37,20 @@ export class DatabasesComponent implements OnInit {
       })
   }
 
-  addDatabase():void {
-    let dialogRef = this.dialog.open(AddDatabaseComponent, {
-      width: '500px'
-    });
+  addDatabase(dsId:number):void {
+
+    let dialogRef;
+    if(dsId) {
+       dialogRef = this.dialog.open(AddDatabaseComponent, {
+        width: '500px', data:{dsId:dsId}
+      });
+    } else {
+       dialogRef = this.dialog.open(AddDatabaseComponent, {
+        width: '500px'
+      });
+    }
+
+
 
     dialogRef.afterClosed().subscribe(refreshValues => {
       console.log('The dialog was closed '+refreshValues);

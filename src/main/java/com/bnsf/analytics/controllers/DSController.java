@@ -25,8 +25,16 @@ public class DSController {
     public List<DataSource> getDataSources() {
  		return dsService.getDataSources();
     }
+	
+	@RequestMapping( "/{dsId}")
+    public DataSource getDataSource(
+    			@PathVariable("dsId") Long dataSourceId
+    		) {
+ 		return dsService.getDataSource(dataSourceId);
+    }
  	
- 	@RequestMapping( value = "/create", method = RequestMethod.POST)
+ 	
+ 	@RequestMapping( value = "/", method = RequestMethod.POST)
     public void addReport(
     			@RequestBody DataSource dataSource
     		) {
@@ -34,7 +42,7 @@ public class DSController {
  		return;
     }
  	
- 	@RequestMapping( value = "/delete/{dsId}", method = RequestMethod.DELETE)
+ 	@RequestMapping( value = "/{dsId}", method = RequestMethod.DELETE)
     public List<DataSource> deleteReport(
     			@PathVariable("dsId") Long dataSourceId
     		) {
