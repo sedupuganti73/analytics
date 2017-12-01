@@ -42,10 +42,10 @@
           <mat-header-cell *matHeaderCellDef> ACTIONS </mat-header-cell>
           <mat-cell *matCellDef="let element" class="button-row"> 
                 
-                    <button mat-mini-fab color="accent" matTooltip="edit column" (click)="addDatabase(element.dsId)">
+                    <button mat-mini-fab color="accent" matTooltip="Edit Data Source" (click)="addDatabase(element.dsId)">
                         <mat-icon >create</mat-icon>
                       </button>    
-                      <button mat-mini-fab color="warn" matTooltip="delete column" (click)="delete(element.dsId)">
+                      <button mat-mini-fab color="warn" matTooltip="Delete Data Source" (click)="delete(element.dsId)">
                           <mat-icon >delete_forever</mat-icon>
                         </button>     
           </mat-cell>
