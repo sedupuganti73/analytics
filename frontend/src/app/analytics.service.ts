@@ -47,11 +47,11 @@ export class AnalyticsService {
   getDatabase(dsId:number):Observable<Response> {
     return this.http.get(this.prefix+'/ds/'+dsId);
   }
-  addDatabase( name:string, description:string, url:string ):Observable<Response> {
-    return this.http.post(this.prefix+'/ds/',{name:name, description:description, url:url});
+  addDatabase( name:string, description:string, url:string, username:string, password:string ):Observable<Response> {
+    return this.http.post(this.prefix+'/ds/',{name:name, description:description, url:url, dbUsername:username, dbPassword:password});
   }
-  updateDatabase( dsId:number, name:string, description:string, url:string ):Observable<Response> {
-    return this.http.post(this.prefix+'/ds/',{ dsId:dsId, name:name, description:description, url:url});
+  updateDatabase( dsId:number, name:string, description:string, url:string, username:string, password:string ):Observable<Response> {
+    return this.http.post(this.prefix+'/ds/',{ dsId:dsId, name:name, description:description, url:url, dbUsername:username, dbPassword:password});
   }
   deleteDatabase ( dsId: number) {
     return this.http.delete(this.prefix+'/ds/'+dsId);

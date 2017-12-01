@@ -13,6 +13,9 @@ export class AddDatabaseComponent   implements OnInit {
   public description:string;
   public url:string;
   public dsId:number;
+  public username:string;
+  public password:string;
+
   public title = "Add Database";
   constructor(public dialogRef: MatDialogRef<AddDatabaseComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any, private analyticsService:AnalyticsService) { }
@@ -28,6 +31,8 @@ export class AddDatabaseComponent   implements OnInit {
                this.description = dataSource.description;
                this.url = dataSource.url;
                this.dsId = dataSource.dsId;
+               this.username = dataSource.dbUsername;
+               this.password = dataSource.dbPassword;
                this.title = "Edit Database "+dataSource.name;
         });  
   
@@ -41,7 +46,7 @@ export class AddDatabaseComponent   implements OnInit {
   addDB():void{
       this.analyticsService.
           addDatabase(this.name, this.description, 
-            this.url)
+            this.url, this.username, this.password)
           .subscribe(data=>{
             this.dialogRef.close(true);
           });  
@@ -51,7 +56,7 @@ export class AddDatabaseComponent   implements OnInit {
   editDB():void{
     this.analyticsService.
         updateDatabase(this.dsId, this.name, this.description, 
-          this.url)
+          this.url , this.username, this.password)
         .subscribe(data=>{
           this.dialogRef.close(true);
         });  

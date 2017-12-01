@@ -20,8 +20,16 @@ public class DataSource {
 	private long dsId;
 	private String name;	
 	private String description;
+	
 	@Column(name = "CONNECTION_URL", nullable = false)
 	private String url;
+	
+	@Column(name = "DB_USER")
+	private String dbUsername;
+	
+	
+	@Column(name = "DB_PASSWORD")
+	private String dbPassword;
 	
 	//@OneToMany(mappedBy = "dataSource", fetch = FetchType.LAZY)
 	//private List<Report> reports;
@@ -58,6 +66,21 @@ public class DataSource {
 		this.url = url;
 	}
 
+	public String getDbUsername() {
+		return dbUsername;
+	}
+
+	public void setDbUsername(String dbUsername) {
+		this.dbUsername = dbUsername;
+	}
+
+	public String getDbPassword() {
+		return dbPassword;
+	}
+
+	public void setDbPassword(String dbPassword) {
+		this.dbPassword = dbPassword;
+	}
 
 	
 }

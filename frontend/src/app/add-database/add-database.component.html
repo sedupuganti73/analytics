@@ -36,7 +36,30 @@
           
             <br><br>
                  
-  
+            <mat-form-field class="example-full-width" color="accent">
+              
+                <input matInput #dbUsername="ngModel" appCommandValidator placeholder="Username" [(ngModel)]="username" name="username" required>
+                <mat-hint align="start"><strong>DB username</strong> </mat-hint>
+                
+              <mat-error *ngIf="dbUsername.invalid && (dbUsername.dirty || dbUsername.touched) && dbUsername.errors.required">
+                   Username is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          
+            <br><br>
+
+            <mat-form-field class="example-full-width" color="accent">
+              
+                <input matInput #dbPassword="ngModel" appCommandValidator placeholder="Password" [(ngModel)]="password" name="password" type="password" required>
+                <mat-hint align="start"><strong>DB Password</strong> </mat-hint>
+                
+              <mat-error *ngIf="dbPassword.invalid && (dbPassword.dirty || dbPassword.touched) && dbPassword.errors.required">
+                    Password is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          
+            <br><br>
+
   
               <button *ngIf="dsId!=null" mat-raised-button [disabled]="form.invalid" (click)="editDB()" color="primary">
                   <mat-icon aria-label="Submit">create</mat-icon>&nbsp;Update Database
