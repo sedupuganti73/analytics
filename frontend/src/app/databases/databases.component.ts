@@ -15,7 +15,7 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 export class DatabasesComponent implements OnInit {
 
   public datasource:DataSource<DBDataSource> = new DsDataSource() ;
-  public displayedColumns = [ 'name', 'description', 'url',  'actions'];
+  public displayedColumns = [ 'name', 'description', 'url', 'dbUsername', 'dbPassword', 'actions'];
   public loading:boolean=true;
   
   constructor(private analyticsService:AnalyticsService, public dialog: MatDialog) { }
@@ -70,12 +70,12 @@ export class DatabasesComponent implements OnInit {
 
 export interface DBDataSource {
   
-
   dsId: string,
   name: string,
   description: string,
-  url: string
-
+  url: string,
+  dbUsername: string,
+  dbPassword: string
 }
 
 let dataSources:DBDataSource[] = [];

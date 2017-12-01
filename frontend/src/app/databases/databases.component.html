@@ -37,6 +37,16 @@
           <mat-header-cell *matHeaderCellDef> URL </mat-header-cell>
           <mat-cell *matCellDef="let element"> {{element.url}} </mat-cell>
         </ng-container>
+
+        <ng-container matColumnDef="dbUsername">
+          <mat-header-cell *matHeaderCellDef> USERNAME </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.dbUsername}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="dbPassword">
+          <mat-header-cell *matHeaderCellDef> PASSWORD </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.dbPassword}} </mat-cell>
+        </ng-container>
     
         <ng-container matColumnDef="actions">
           <mat-header-cell *matHeaderCellDef> ACTIONS </mat-header-cell>

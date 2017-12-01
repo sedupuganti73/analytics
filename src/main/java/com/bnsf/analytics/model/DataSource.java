@@ -1,15 +1,14 @@
 package com.bnsf.analytics.model;
 
-import java.util.List;
-
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.bnsf.analytics.convertors.CryptoConvertor;
 
 @Entity
 @Table(name="DATA_SET_DATASOURCE", schema = "NP_CRM1")
@@ -27,7 +26,7 @@ public class DataSource {
 	@Column(name = "DB_USER")
 	private String dbUsername;
 	
-	
+	@Convert(converter= CryptoConvertor.class)
 	@Column(name = "DB_PASSWORD")
 	private String dbPassword;
 	
