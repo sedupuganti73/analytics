@@ -8,7 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.bnsf.analytics.convertors.CryptoConvertor;
+//import com.bnsf.analytics.convertors.CryptoConvertor;
 
 @Entity
 @Table(name="DATA_SET_DATASOURCE", schema = "NP_CRM1")
@@ -26,7 +26,7 @@ public class DataSource {
 	@Column(name = "DB_USER")
 	private String dbUsername;
 	
-	@Convert(converter= CryptoConvertor.class)
+	//@Convert(converter= CryptoConvertor.class)
 	@Column(name = "DB_PASSWORD")
 	private String dbPassword;
 	

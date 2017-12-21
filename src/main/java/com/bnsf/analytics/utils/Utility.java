@@ -14,13 +14,13 @@ public class Utility {
 	private static final int PROXY_PORT =8080;
 	
 
-	@Value("${spring.datasource.url}")	
+	@Value("${spring.SFDC.url}")	
     private String sfdcUrl;	
 	
-	@Value("${spring.datasource.username}")	 
+	@Value("${spring.SFDC.username}")	 
     private String userName;	
 	
-	@Value("${spring.datasource.password}")	
+	@Value("${spring.SFDC.password}")	
     private String password;
 	
 	public PartnerConnection  getConnection()  {

@@ -18,6 +18,10 @@ spring:
         show_sql: true
         use_sql_comments: true
         format_sql: true
+  SFDC:
+     url: https://test.salesforce.com/services/Soap/u/36.0
+     username: sudarshanrao.edupuganti@bnsf.com.trial
+     password: Test1234$uPU6CdotIMQ3ESGpE4C0h8xJq     
 
 ###
 #   H2 Settings

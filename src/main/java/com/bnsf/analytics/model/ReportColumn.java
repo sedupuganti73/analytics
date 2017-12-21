@@ -19,6 +19,8 @@ public class ReportColumn {
 	private String format;
 	private String name;
 	private String label;
+	private int scale;
+	private int precision;
 	
 	@Column(name = "REPORT_ID", nullable = false)
 	private long reportId;
@@ -60,5 +62,17 @@ public class ReportColumn {
 	}
 	public void setFormat(String format) {
 		this.format = format;
+	}
+	public int getScale() {
+		return scale;
+	}
+	public void setScale(int scale) {
+		this.scale = scale;
+	}
+	public int getPrecision() {
+		return precision;
+	}
+	public void setPrecision(int precision) {
+		this.precision = precision;
 	}
 }
