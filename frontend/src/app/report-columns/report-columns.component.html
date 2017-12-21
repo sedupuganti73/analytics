@@ -1,8 +1,12 @@
-<mat-card class="main-container">
-    <a [routerLink]="['/reports']"  style="text-decoration:none; color: #f44336;">Registered Reports</a> &nbsp;
-    / &nbsp; <button mat-fab (click)="addColumn()" color="primary"  matTooltip="Add Column" style="position:fixed;top:95px;right:95px">
+<div class="page-container">
+    <div> <a [routerLink]="['/reports']"  style="text-decoration:none; color: #f44336;">Registered Reports</a> &nbsp;
+      / &nbsp; <p style="display:inline" class="page-title">Registered Columns</p> </div>
+    
+    
+    <button mat-fab (click)="addColumn()" color="primary"  matTooltip="Add Column" class="add-button">
         <mat-icon >add</mat-icon>
-      </button>  &nbsp;   Registered Columns
+      </button>  &nbsp;  
+      
   
   <br><br>
   
@@ -58,5 +62,5 @@
       </div>
   
 
-  </mat-card>
+    </div>
   

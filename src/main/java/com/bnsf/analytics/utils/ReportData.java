@@ -24,6 +24,43 @@ import com.bnsf.analytics.model.ReportColumn;
 public class ReportData {
 	private static final String DELIMITER="|";
 	
+	public List<ReportColumn> getColumns (Connection conn , Report report) {
+		PreparedStatement preparedStmt = null;
+		ResultSet result = null;
+		List<ReportColumn> reportColumnList = null;
+		try {
+			String query = report.getQuery();
+			query = query.replaceFirst("SELECT", "SELECT TOP 1");
+			query = query.replaceFirst("select", "SELECT TOP 1");
+			preparedStmt =conn.prepareStatement(query);
+		    result = preparedStmt.executeQuery();
+		    reportColumnList = getColumnDefintion(result.getMetaData(), report);
+		}  catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			if (result != null) {
+				try {
+					result.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				result = null;
+			}
+			if (preparedStmt != null) {
+				try {
+					preparedStmt.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				preparedStmt = null;
+			}
+		}
+		return reportColumnList;
+	}
+	
 	public List<ReportColumn> extractData (Connection conn , Report report,String folderPath, boolean columdDetails) throws FileNotFoundException {
 		PreparedStatement preparedStmt = null;
 		ResultSet result = null;

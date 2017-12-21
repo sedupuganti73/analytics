@@ -1,3 +1,4 @@
+
 .page-title{
     margin-left: auto;
 }
@@ -13,11 +14,7 @@
     width:98%;
 }
 
-.mat-card-footer{
-    position: fixed;
-    bottom: 50px;
-    left: 45%;
-}
+
 
 .mat-drawer{
     height: 100%;
@@ -41,9 +38,3 @@ mat-list-item.mat-list-item.active {
     padding-top:0;
 }
 
-
-.mat-card-footer{
-    position: fixed;
-    bottom: 50px;
-    left: 45%;
-}

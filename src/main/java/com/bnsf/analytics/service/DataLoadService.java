@@ -3,6 +3,7 @@ package com.bnsf.analytics.service;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -47,6 +48,21 @@ public class DataLoadService {
 	@Autowired
 	private Utility utils;
 
+	
+	public List<ReportColumn>  getColumns(Report report) throws ClassNotFoundException, SQLException  {
+		Connection  dbConnection = null;
+		List<ReportColumn> columns = null;
+		try {
+			dbConnection =connection.getConntection();
+			columns = reportData.getColumns(dbConnection, report); 	
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			connection.closeConnection(dbConnection);
+		}
+		return columns;
+	}
+	
 	
 	public void  loadData()  {
 		//utils.getConnection();
