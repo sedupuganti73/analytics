@@ -34,7 +34,7 @@
 
           <ng-container matColumnDef="type">
             <mat-header-cell *matHeaderCellDef> TYPE </mat-header-cell>
-            <mat-cell *matCellDef="let element"> {{element.type=='c'?'Currency':'Date'}} </mat-cell>
+            <mat-cell *matCellDef="let element"> {{element.type | type}} </mat-cell>
           </ng-container>
       
           <ng-container matColumnDef="format">

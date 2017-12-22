@@ -14,6 +14,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AddColumnComponent } from './add-column/add-column.component';
 import { DatabasesComponent } from './databases/databases.component';
 import { AddDatabaseComponent } from './add-database/add-database.component';
+import { TypePipe } from './report-columns/type.pipe';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import { AddDatabaseComponent } from './add-database/add-database.component';
     AddReportComponent,
     AddColumnComponent,
     DatabasesComponent,
-    AddDatabaseComponent
+    AddDatabaseComponent,
+    TypePipe
   ],
   imports: [
     BrowserAnimationsModule,

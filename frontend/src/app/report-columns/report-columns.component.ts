@@ -14,53 +14,52 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
   providers: [AnalyticsService]
 })
 export class ReportColumnsComponent implements OnInit {
-  public datasource:DataSource<Column> = new ColumnsDataSource() ;
+  public datasource: DataSource<Column> = new ColumnsDataSource() ;
   public displayedColumns = [ 'name', 'label',  'type', 'format', 'actions'];
-  public loading:boolean=true;
-  public reportId:number;
-  constructor(private route: ActivatedRoute, private analyticsService:AnalyticsService, public dialog: MatDialog) { }
+  public loading = true;
+  public reportId: number;
+  constructor(private route: ActivatedRoute, private analyticsService: AnalyticsService, public dialog: MatDialog) { }
 
   ngOnInit() {
     this.reportId = +this.route.snapshot.paramMap.get('report-id');
-    this.analyticsService.getReportColumns(this.reportId).subscribe(data=>{
+    this.analyticsService.getReportColumns(this.reportId).subscribe(data => {
         columns = data.json();
         this.datasource = new ColumnsDataSource();
         this.loading = false;
     });
   }
 
-  delete(columnId:string):void {
+  delete(columnId: string): void {
       this.loading = true;
       this.analyticsService.deleteReportColumn(+columnId, this.reportId).subscribe(data=>{
         columns = data.json();
         this.datasource = new ColumnsDataSource();
         this.loading = false;
-      })
+      });
   }
 
-  addColumn():void {
-    let dialogRef = this.dialog.open(AddColumnComponent, {
+  addColumn(): void {
+    const dialogRef = this.dialog.open(AddColumnComponent, {
       width: '500px', data: { reportId: this.reportId}
     });
 
     dialogRef.afterClosed().subscribe(refreshValues => {
-      console.log('The dialog was closed '+refreshValues);
-      if(refreshValues) {
+      console.log('The dialog was closed ' + refreshValues);
+      if ( refreshValues) {
         this.loading = true;
-        this.analyticsService.getReportColumns(this.reportId).subscribe(data=>{
+        this.analyticsService.getReportColumns(this.reportId).subscribe(data => {
             columns = data.json();
             this.datasource = new ColumnsDataSource();
             this.loading = false;
         });
       }
-    }); 
+    });
   }
 }
 
 
 
 export interface Column {
-  
 
   columnId: string,
   reportId: string,
@@ -71,7 +70,7 @@ export interface Column {
 
 }
 
-let columns:Column[] = [];
+let columns: Column[] = [];
 
 
 /**
@@ -88,7 +87,6 @@ export class ColumnsDataSource extends DataSource<any> {
   /** Connect function called by the table to retrieve one stream containing the data to render. */
   connect(): Observable<Column[]> {
     return Observable.of(columns);
-    //return this.adminService.getCommands(this.siteId);
   }
 
   disconnect() {}
