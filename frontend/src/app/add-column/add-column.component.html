@@ -3,7 +3,7 @@
   <form class="example-form" #form="ngForm" autocomplete="off">
       
           <mat-form-field class="example-full-width" color="accent">
-            <input matInput #columnName="ngModel" appCommandValidator placeholder="Column Name" [(ngModel)]="name" name="name" required>
+            <input matInput #columnName="ngModel" appCommandValidator placeholder="Column Name" readonly [(ngModel)]="name" name="name" required>
             <mat-hint align="start"><strong>Name of column</strong> </mat-hint>
             
             <mat-error *ngIf="columnName.invalid && (columnName.dirty || columnName.touched) && columnName.errors.required">
