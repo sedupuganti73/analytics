@@ -8,7 +8,7 @@ import { ReportColumnsComponent } from './report-columns/report-columns.componen
 import { HistoryComponent } from './history/history.component';
 import { AppRoutingModule } from './app-routing.module';
 import {MatToolbarModule, MatSidenavModule, MatListModule, MatSelectModule, MatSnackBarModule,
-  MatTooltipModule, MatProgressBarModule, MatDialogModule, MatCardModule,
+  MatTooltipModule, MatProgressBarModule, MatDialogModule, MatCardModule, MatProgressSpinnerModule,
   MatButtonModule, MatIconModule, MatFormFieldModule, MatInputModule, MatTableModule} from '@angular/material';
 import { AddReportComponent } from './add-report/add-report.component';
 import { FormsModule } from '@angular/forms';
@@ -50,6 +50,7 @@ import { TypePipe } from './report-columns/type.pipe';
     MatTableModule,
     MatSnackBarModule,
     MatSelectModule,
+    MatProgressSpinnerModule,
     HttpClientModule
   ],
   entryComponents: [AddReportComponent, AddColumnComponent, AddDatabaseComponent],

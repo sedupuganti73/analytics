@@ -2,15 +2,16 @@
 .example-form {
     min-width: 150px;
     width: 100%;
-  }
- 
-  
-  .example-full-width {
-    width: 100%;
-  }
+}
 
-  
+.example-full-width {
+  width: 100%;
+}
 
 .mat-input-invalid {
     margin-bottom: 5px;
 }  
+
+.progress-spinner {
+  left: 35%;
+}

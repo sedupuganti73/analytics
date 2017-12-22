@@ -8,4 +8,5 @@ import com.bnsf.analytics.model.ReportColumn;
 
 public interface ColumnRepository extends JpaRepository<ReportColumn, Long>{
 	List<ReportColumn> findByReportId(long reportId);
+	void deleteByReportId(long reportId);
 }

@@ -3,6 +3,8 @@ package com.bnsf.analytics.service;
 import java.sql.SQLException;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,7 +53,9 @@ public class ReportsService {
 		
 	}
 	
+	@Transactional
 	public void deleteReport (Long reportId) {
 		reportRepository.delete(reportId);
+		columnRepository.deleteByReportId(reportId);
 	}
 }

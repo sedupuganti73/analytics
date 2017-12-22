@@ -1,4 +1,10 @@
 <div class="example-container">
+    <mat-progress-spinner *ngIf="loading==true"
+        class="progress-spinner"
+        color="primary"
+        mode="indeterminate"
+        value="50">
+    </mat-progress-spinner>
     <h1 mat-dialog-title>{{title}}</h1>
     <form class="example-form" #form="ngForm" autocomplete="off">
         
@@ -29,7 +35,7 @@
                 <br><br>  
 
               <mat-form-field class="example-full-width" color="accent"  >
-                  <textarea matInput placeholder="Query" [(ngModel)]="query" name="query" required></textarea>
+                  <textarea rows="5" matInput placeholder="Query" [(ngModel)]="query" name="query" required></textarea>
                   <mat-hint align="start"><strong >Query to generate report</strong> </mat-hint>
                   
                 </mat-form-field>

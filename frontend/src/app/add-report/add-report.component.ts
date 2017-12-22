@@ -16,6 +16,7 @@ export class AddReportComponent  implements OnInit {
   public title = 'Add Report';
   public reportId: number = null;
   public selectedDB: number;
+  public loading = false;
 
   constructor(public dialogRef: MatDialogRef<AddReportComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any, private analyticsService: AnalyticsService) {
@@ -46,9 +47,11 @@ export class AddReportComponent  implements OnInit {
   }
 
   addReport(): void {
+      this.loading = true;
       this.analyticsService.
           addReport(this.name, this.query, this.selectedDB, this.createdBy)
           .subscribe(data => {
+            this.loading = false;
             this.dialogRef.close(true);
           });
   }
