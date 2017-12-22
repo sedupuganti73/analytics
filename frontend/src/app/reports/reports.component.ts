@@ -4,7 +4,7 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import {AnalyticsService} from '../analytics.service';
 import {AddReportComponent} from '../add-report/add-report.component';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import {MatDialog, MatDialogRef, MatSnackBar, MAT_DIALOG_DATA} from '@angular/material';
 
 @Component({
   selector: 'app-reports',
@@ -16,7 +16,7 @@ export class ReportsComponent implements OnInit {
   public datasource: DataSource<Report> = new ReportsDataSource() ;
   public displayedColumns = [ 'name', 'query', 'type', 'createdBy', 'actions'];
   public loading = true;
-  constructor(private analyticsService: AnalyticsService, public dialog: MatDialog) { }
+  constructor(private analyticsService: AnalyticsService, public dialog: MatDialog, public snackBar: MatSnackBar) { }
 
   ngOnInit() {
     this.analyticsService.getReports().subscribe(data => {
@@ -32,6 +32,10 @@ export class ReportsComponent implements OnInit {
         reports = data;
         this.datasource = new ReportsDataSource();
         this.loading = false;
+        this.snackBar.open('Report Deleted', null,
+        {
+          duration: 1000
+        });
       });
   }
 

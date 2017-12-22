@@ -21,6 +21,10 @@ public class ColumnsService {
 		return columnRepository.findByReportId(reportId);
 	}
 	
+	public ReportColumn getColumn(long columnId)  {
+		return columnRepository.findOne(columnId);
+	}
+	
 	public void addColumn(ReportColumn column) {
 		columnRepository.save(column);
 	}

@@ -46,4 +46,13 @@ export class AddColumnComponent  implements OnInit {
           });
   }
 
+  editColumn(): void {
+    this.analyticsService.
+        updateReportColumn(+this.columnId, this.name , +this.data.reportId, this.label, this.type, this.format )
+          .subscribe(data => {
+          this.dialogRef.close(true);
+        });
+  }
+
+
 }

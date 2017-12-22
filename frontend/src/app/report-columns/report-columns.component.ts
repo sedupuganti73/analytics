@@ -40,7 +40,7 @@ export class ReportColumnsComponent implements OnInit {
 
   addEditColumn(columnId: string): void {
     let dialogRef;
-    if ( dialogRef ) {
+    if ( columnId ) {
       dialogRef = this.dialog.open(AddColumnComponent, {
         width: '500px', data: { columnId: columnId, reportId: this.reportId}
       });

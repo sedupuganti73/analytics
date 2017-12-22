@@ -35,11 +35,11 @@ public class DSController {
  	
  	
  	@RequestMapping( value = "/", method = RequestMethod.POST)
-    public void addReport(
+    public DataSource addReport(
     			@RequestBody DataSource dataSource
     		) {
  		dsService.addDataSource(dataSource);
- 		return;
+ 		return dataSource;
     }
  	
  	@RequestMapping( value = "/{dsId}", method = RequestMethod.DELETE)

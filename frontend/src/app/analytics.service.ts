@@ -29,7 +29,7 @@ export class AnalyticsService {
     return this.http.delete(this.prefix + '/reports/delete/' + reportId);
   }
   getReportColumn(columnId: number): Observable<any> {
-    return this.http.get(this.prefix + '/columns/' + columnId);
+    return this.http.get(this.prefix + '/columns/column/' + columnId);
   }
   getReportColumns(reportId: number): Observable<any> {
     return this.http.get(this.prefix + '/columns/' + reportId);
@@ -40,6 +40,12 @@ export class AnalyticsService {
 
   addReportColumn( name: string, reportId: number, label: string, type: string, format: string ): Observable<any> {
     return this.http.post(this.prefix + '/columns/create', { name: name, reportId: reportId, label: label, type: type, format: format});
+  }
+
+  updateReportColumn( columnId: number, name: string, reportId: number, label: string, type: string, format: string ): Observable<any> {
+    return this.http.post(this.prefix +
+      '/columns/create',
+      { columnId: columnId, name: name, reportId: reportId, label: label, type: type, format: format});
   }
 
   deleteReportColumn ( columnId: number, reportId: number): Observable<any> {

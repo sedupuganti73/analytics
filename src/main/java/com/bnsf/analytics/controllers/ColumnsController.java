@@ -26,13 +26,18 @@ public class ColumnsController {
     public List<ReportColumn> getColumns(@PathVariable("reportId") Long reportId) {
  		return columnsService.getColumns(reportId);
     }
+	
+	@RequestMapping( "/column/{columnId}")
+    public ReportColumn getColumn(@PathVariable("columnId") Long columnId) {
+ 		return columnsService.getColumn(columnId);
+    }
  	
  	@RequestMapping( value = "/create", method = RequestMethod.POST)
-    public void addColumn(
+    public ReportColumn addColumn(
     			@RequestBody ReportColumn column
     		) {
  		columnsService.addColumn(column);
- 		return;
+ 		return column;
     }
  	
  	@RequestMapping( value = "/delete/{columnId}/{reportId}", method = RequestMethod.DELETE)

@@ -4,3 +4,10 @@ body {
     background-color: #303030;
     margin: 0;
 }
+
+
+
+snack-bar-container.mat-snack-bar-container {
+    background-color: #f44336;
+    color: white;
+}

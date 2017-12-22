@@ -4,7 +4,7 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import {AnalyticsService} from '../analytics.service';
 import {AddDatabaseComponent} from '../add-database/add-database.component';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import {MatDialog, MatDialogRef, MatSnackBar, MAT_DIALOG_DATA} from '@angular/material';
 
 @Component({
   selector: 'app-databases',
@@ -17,7 +17,7 @@ export class DatabasesComponent implements OnInit {
   public datasource: DataSource<DBDataSource> = new DsDataSource() ;
   public displayedColumns = [ 'name', 'description', 'url', 'dbUsername', 'dbPassword', 'actions'];
   public loading = true;
-  constructor(private analyticsService: AnalyticsService, public dialog: MatDialog) { }
+  constructor(private analyticsService: AnalyticsService, public dialog: MatDialog, public snackBar: MatSnackBar) { }
 
   ngOnInit() {
     this.analyticsService.getDatabases().subscribe(data => {
@@ -33,6 +33,10 @@ export class DatabasesComponent implements OnInit {
         dataSources = data;
         this.datasource = new DsDataSource();
         this.loading = false;
+        this.snackBar.open('Data Source Deleted', null,
+        {
+          duration: 1000
+        });
       });
   }
 

@@ -41,7 +41,7 @@ public class ReportsController {
 	 	
 	 	
 	 	@RequestMapping( value = "/", method = RequestMethod.POST)
-	    public void addReport(
+	    public Report addReport(
 	    			@RequestBody LinkedHashMap<String, String> reportObj
 	    		) {
 	 		Report report  = new Report();
@@ -53,7 +53,7 @@ public class ReportsController {
 	 		report.setQuery(reportObj.get("query"));
 	 		report.setCreatedBy(reportObj.get("createdBy"));
 	 		reportsService.addReport(report);
-	 		return;
+	 		return report;
 	    }
 	 	
 	 	@RequestMapping( value = "/delete/{reportId}", method = RequestMethod.DELETE)
