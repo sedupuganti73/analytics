@@ -23,7 +23,7 @@ export class ReportColumnsComponent implements OnInit {
   ngOnInit() {
     this.reportId = +this.route.snapshot.paramMap.get('report-id');
     this.analyticsService.getReportColumns(this.reportId).subscribe(data => {
-        columns = data.json();
+        columns = data;
         this.datasource = new ColumnsDataSource();
         this.loading = false;
     });
@@ -31,24 +31,32 @@ export class ReportColumnsComponent implements OnInit {
 
   delete(columnId: string): void {
       this.loading = true;
-      this.analyticsService.deleteReportColumn(+columnId, this.reportId).subscribe(data=>{
-        columns = data.json();
+      this.analyticsService.deleteReportColumn(+columnId, this.reportId).subscribe(data => {
+        columns = data;
         this.datasource = new ColumnsDataSource();
         this.loading = false;
       });
   }
 
-  addColumn(): void {
-    const dialogRef = this.dialog.open(AddColumnComponent, {
-      width: '500px', data: { reportId: this.reportId}
-    });
+  addEditColumn(columnId: string): void {
+    let dialogRef;
+    if ( dialogRef ) {
+      dialogRef = this.dialog.open(AddColumnComponent, {
+        width: '500px', data: { columnId: columnId, reportId: this.reportId}
+      });
+    } else {
+      dialogRef = this.dialog.open(AddColumnComponent, {
+        width: '500px', data: { reportId: this.reportId}
+      });
+    }
+
 
     dialogRef.afterClosed().subscribe(refreshValues => {
       console.log('The dialog was closed ' + refreshValues);
       if ( refreshValues) {
         this.loading = true;
         this.analyticsService.getReportColumns(this.reportId).subscribe(data => {
-            columns = data.json();
+            columns = data;
             this.datasource = new ColumnsDataSource();
             this.loading = false;
         });
@@ -61,12 +69,12 @@ export class ReportColumnsComponent implements OnInit {
 
 export interface Column {
 
-  columnId: string,
-  reportId: string,
-  name: string,
-  label: string,
-  type: string,
-  format: string
+  columnId: string;
+  reportId: string;
+  name: string;
+  label: string;
+  type: string;
+  format: string;
 
 }
 

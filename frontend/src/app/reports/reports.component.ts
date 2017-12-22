@@ -13,74 +13,72 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
   providers: [AnalyticsService]
 })
 export class ReportsComponent implements OnInit {
-  public datasource:DataSource<Report> = new ReportsDataSource() ;
+  public datasource: DataSource<Report> = new ReportsDataSource() ;
   public displayedColumns = [ 'name', 'query', 'type', 'createdBy', 'actions'];
-  public loading:boolean=true;
-  
-  constructor(private analyticsService:AnalyticsService, public dialog: MatDialog) { }
+  public loading = true;
+  constructor(private analyticsService: AnalyticsService, public dialog: MatDialog) { }
 
   ngOnInit() {
-    this.analyticsService.getReports().subscribe(data=>{
-        reports = data.json();
+    this.analyticsService.getReports().subscribe(data => {
+        reports = data;
         this.datasource = new ReportsDataSource();
         this.loading = false;
     });
   }
 
-  delete(reportId:string):void {
+  delete(reportId: string): void {
       this.loading = true;
-      this.analyticsService.deleteReport(+reportId).subscribe(data=>{
-        reports = data.json();
+      this.analyticsService.deleteReport(+reportId).subscribe(data => {
+        reports = data;
         this.datasource = new ReportsDataSource();
         this.loading = false;
-      })
+      });
   }
 
-  
-  addEditReport(reportId:string):void {
+
+  addEditReport(reportId: string): void {
     let dialogRef;
-    if(reportId) {
+    if ( reportId) {
        dialogRef = this.dialog.open(AddReportComponent, {
-        width: '500px', data:{reportId:reportId}
+        width: '500px', data: { reportId: reportId}
       });
     } else {
        dialogRef = this.dialog.open(AddReportComponent, {
         width: '500px'
       });
     }
-    
+
 
     dialogRef.afterClosed().subscribe(refreshValues => {
-      console.log('The dialog was closed '+refreshValues);
-      if(refreshValues) {
+      console.log('The dialog was closed ' + refreshValues);
+      if ( refreshValues) {
         this.loading = true;
-        this.analyticsService.getReports().subscribe(data=>{
-            reports = data.json();
+        this.analyticsService.getReports().subscribe(data => {
+            reports = data;
             this.datasource = new ReportsDataSource();
             this.loading = false;
         });
       }
-    }); 
+    });
   }
 }
 
 
 
 export interface Report {
-  
 
-  reportId: string,
-  name: string,
-  dbUsername: string,
-  dbPassword: string,
-  query: string,
-  label: string,
-  type: string,
-  createdBy: string
+  reportId: string;
+  name: string;
+  dbUsername: string;
+  dbPassword: string;
+  query: string;
+  label: string;
+  type: string;
+  createdBy: string;
 
 }
 
-let reports:Report[] = [];
+let reports: Report[] = [];
 
 
 /**
@@ -97,7 +95,6 @@ export class ReportsDataSource extends DataSource<any> {
   /** Connect function called by the table to retrieve one stream containing the data to render. */
   connect(): Observable<Report[]> {
     return Observable.of(reports);
-    //return this.adminService.getCommands(this.siteId);
   }
 
   disconnect() {}

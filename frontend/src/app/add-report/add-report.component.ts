@@ -9,56 +9,55 @@ import {AnalyticsService} from '../analytics.service';
   styleUrls: ['./add-report.component.css']
 })
 export class AddReportComponent  implements OnInit {
-  public name:string='';
-  public query:string = '';
-  public createdBy:string = '';
+  public name = '';
+  public query = '';
+  public createdBy = '';
   public dbTypes = [];
-  public title = "Add Report";
-  public reportId:number = null;
-  public selectedDB:number;
+  public title = 'Add Report';
+  public reportId: number = null;
+  public selectedDB: number;
 
   constructor(public dialogRef: MatDialogRef<AddReportComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any, private analyticsService:AnalyticsService) {
-        this.analyticsService.getDatabases().subscribe(data=>{
-            this.dbTypes = data.json();
+    @Inject(MAT_DIALOG_DATA) public data: any, private analyticsService: AnalyticsService) {
+        this.analyticsService.getDatabases().subscribe( data => {
+            this.dbTypes = data;
             this.selectedDB = this.dbTypes[0].dsId;
         });
-   
      }
 
-  ngOnInit(){
-    if(this.data && this.data.reportId) {
+  ngOnInit() {
+    if ( this.data && this.data.reportId) {
       this.reportId = this.data.reportId;
       this.analyticsService.getReport(this.data.reportId)
-      .subscribe(data=>{
-             var report = data.json();
+      .subscribe(data => {
+             const report = data;
              this.name = report.name;
-             this.title = "Edit Report "+report.name;
+             this.title = 'Edit Report ' + report.name;
              this.query = report.query;
-             this.selectedDB =  report.dataSource.dsId; 
+             this.selectedDB =  report.dataSource.dsId;
              this.createdBy = report.createdBy;
-      });  
+      });
 
     }
-  }   
+  }
 
   onNoClick(): void {
     this.dialogRef.close(false);
   }
 
-  addReport():void{
+  addReport(): void {
       this.analyticsService.
           addReport(this.name, this.query, this.selectedDB, this.createdBy)
-          .subscribe(data=>{
+          .subscribe(data => {
             this.dialogRef.close(true);
-          });  
+          });
   }
 
-  updateReport():void{
+  updateReport(): void {
     this.analyticsService.updateReport( this.reportId, this.name, this.query, this.selectedDB, this.createdBy)
-        .subscribe(data=>{
+        .subscribe(data => {
           this.dialogRef.close(true);
-        });  
+        });
   }
 
 }

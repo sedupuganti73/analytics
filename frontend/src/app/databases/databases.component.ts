@@ -14,35 +14,34 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 })
 export class DatabasesComponent implements OnInit {
 
-  public datasource:DataSource<DBDataSource> = new DsDataSource() ;
+  public datasource: DataSource<DBDataSource> = new DsDataSource() ;
   public displayedColumns = [ 'name', 'description', 'url', 'dbUsername', 'dbPassword', 'actions'];
-  public loading:boolean=true;
-  
-  constructor(private analyticsService:AnalyticsService, public dialog: MatDialog) { }
+  public loading = true;
+  constructor(private analyticsService: AnalyticsService, public dialog: MatDialog) { }
 
   ngOnInit() {
-    this.analyticsService.getDatabases().subscribe(data=>{
-        dataSources = data.json();
+    this.analyticsService.getDatabases().subscribe(data => {
+        dataSources = data;
         this.datasource = new DsDataSource();
         this.loading = false;
     });
   }
 
-  delete(dsId:string):void {
+  delete(dsId: string): void {
       this.loading = true;
-      this.analyticsService.deleteDatabase(+dsId).subscribe(data=>{
-        dataSources = data.json();
+      this.analyticsService.deleteDatabase(+dsId).subscribe(data => {
+        dataSources = data;
         this.datasource = new DsDataSource();
         this.loading = false;
-      })
+      });
   }
 
-  addDatabase(dsId:number):void {
+  addDatabase(dsId: number): void {
 
     let dialogRef;
-    if(dsId) {
+    if (dsId) {
        dialogRef = this.dialog.open(AddDatabaseComponent, {
-        width: '500px', data:{dsId:dsId}
+        width: '500px', data: {dsId: dsId}
       });
     } else {
        dialogRef = this.dialog.open(AddDatabaseComponent, {
@@ -53,32 +52,31 @@ export class DatabasesComponent implements OnInit {
 
 
     dialogRef.afterClosed().subscribe(refreshValues => {
-      console.log('The dialog was closed '+refreshValues);
-      if(refreshValues) {
+      console.log('The dialog was closed ' + refreshValues);
+      if (refreshValues) {
         this.loading = true;
-        this.analyticsService.getDatabases().subscribe(data=>{
-            dataSources = data.json();
+        this.analyticsService.getDatabases().subscribe(data => {
+            dataSources = data;
             this.datasource = new DsDataSource();
             this.loading = false;
         });
       }
-    }); 
+    });
   }
 }
 
 
 
 export interface DBDataSource {
-  
-  dsId: string,
-  name: string,
-  description: string,
-  url: string,
-  dbUsername: string,
-  dbPassword: string
+  dsId: string;
+  name: string;
+  description: string;
+  url: string;
+  dbUsername: string;
+  dbPassword: string;
 }
 
-let dataSources:DBDataSource[] = [];
+let dataSources: DBDataSource[] = [];
 
 
 /**
@@ -95,7 +93,6 @@ export class DsDataSource extends DataSource<any> {
   /** Connect function called by the table to retrieve one stream containing the data to render. */
   connect(): Observable<DBDataSource[]> {
     return Observable.of(dataSources);
-    //return this.adminService.getCommands(this.siteId);
   }
 
   disconnect() {}

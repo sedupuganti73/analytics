@@ -3,7 +3,7 @@
       / &nbsp; <p style="display:inline" class="page-title">Registered Columns</p> </div>
     
     
-    <button mat-fab (click)="addColumn()" color="primary"  matTooltip="Add Column" class="add-button">
+    <button mat-fab (click)="addEditColumn()" color="primary"  matTooltip="Add Column" class="add-button">
         <mat-icon >add</mat-icon>
       </button>  &nbsp;  
       
@@ -46,7 +46,7 @@
             <mat-header-cell *matHeaderCellDef> ACTIONS </mat-header-cell>
             <mat-cell *matCellDef="let element" class="button-row"> 
                   
-                      <button mat-mini-fab color="accent" matTooltip="edit column">
+                      <button mat-mini-fab color="accent" matTooltip="edit column" (click)="addEditColumn(element.columnId)">
                           <mat-icon >create</mat-icon>
                         </button>    
                         <button mat-mini-fab color="warn" matTooltip="delete column" (click)="delete(element.columnId)">
