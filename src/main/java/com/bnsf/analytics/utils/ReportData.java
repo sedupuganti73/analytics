@@ -10,13 +10,16 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.persistence.Column;
 
 import org.springframework.stereotype.Component;
 
+import com.bnsf.analytics.exceptions.DuplicateColumnException;
 import com.bnsf.analytics.model.Report;
 import com.bnsf.analytics.model.ReportColumn;
 
@@ -24,14 +27,14 @@ import com.bnsf.analytics.model.ReportColumn;
 public class ReportData {
 	private static final String DELIMITER="|";
 	
-	public List<ReportColumn> getColumns (Connection conn , Report report) {
+	public Set<ReportColumn> getColumns (Connection conn , Report report) throws DuplicateColumnException {
 		PreparedStatement preparedStmt = null;
 		ResultSet result = null;
-		List<ReportColumn> reportColumnList = null;
+		Set<ReportColumn> reportColumnList = null;
 		try {
 			String query = report.getQuery();
-			query = query.replaceFirst("SELECT", "SELECT TOP 1");
-			query = query.replaceFirst("select", "SELECT TOP 1");
+			//query = query.replaceFirst("SELECT", "SELECT TOP 1");
+			//query = query.replaceFirst("select", "SELECT TOP 1");
 			preparedStmt =conn.prepareStatement(query);
 		    result = preparedStmt.executeQuery();
 		    reportColumnList = getColumnDefintion(result.getMetaData(), report);
@@ -148,8 +151,8 @@ public class ReportData {
 		return databuilder.toString();
 	}
 	
-	private List<ReportColumn> getColumnDefintion(ResultSetMetaData rsmd, Report report) throws SQLException {
-		List<ReportColumn> reportColumnsList = new ArrayList<ReportColumn>();
+	private Set<ReportColumn> getColumnDefintion(ResultSetMetaData rsmd, Report report) throws SQLException, DuplicateColumnException {
+		Set<ReportColumn> reportColumnsSet = new HashSet<ReportColumn>();
 	    String columnType = null;
 		for (int i=1;i<=rsmd.getColumnCount();i++) {
 			//columnDefinitionMap.put( rsmd.getColumnName(i), rsmd.getColumnTypeName(i));
@@ -174,11 +177,14 @@ public class ReportData {
 		    	column.setPrecision(rsmd.getPrecision(i));
 		    	column.setFormat("#,##0.00");
 		    }
-			reportColumnsList.add(column);
+			if(!reportColumnsSet.add(column)) {
+				System.out.println("dup col found "+column.getName());
+				throw new DuplicateColumnException(column.getName());
+			}
 		}
 				
 	    
-	    return reportColumnsList;
+	    return reportColumnsSet;
 	}
  
 }

@@ -17,6 +17,7 @@ import { AddColumnComponent } from './add-column/add-column.component';
 import { DatabasesComponent } from './databases/databases.component';
 import { AddDatabaseComponent } from './add-database/add-database.component';
 import { TypePipe } from './report-columns/type.pipe';
+import { QueryPipe } from './reports/query.pipe';
 
 
 @NgModule({
@@ -29,7 +30,8 @@ import { TypePipe } from './report-columns/type.pipe';
     AddColumnComponent,
     DatabasesComponent,
     AddDatabaseComponent,
-    TypePipe
+    TypePipe,
+    QueryPipe
   ],
   imports: [
     BrowserAnimationsModule,

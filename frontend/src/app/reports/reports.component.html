@@ -30,7 +30,7 @@
 
         <ng-container matColumnDef="query">
             <mat-header-cell *matHeaderCellDef> QUERY </mat-header-cell>
-            <mat-cell *matCellDef="let element"> {{element.query}} </mat-cell>
+            <mat-cell *matCellDef="let element" style="padding-right:10px" [matTooltip]="element.query"> {{element.query | query }} </mat-cell>
           </ng-container>
       
        

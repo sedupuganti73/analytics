@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bnsf.analytics.exceptions.DuplicateColumnException;
 import com.bnsf.analytics.model.Report;
 import com.bnsf.analytics.service.DataSourceService;
 import com.bnsf.analytics.service.ReportsService;
@@ -43,7 +44,7 @@ public class ReportsController {
 	 	@RequestMapping( value = "/", method = RequestMethod.POST)
 	    public Report addReport(
 	    			@RequestBody LinkedHashMap<String, String> reportObj
-	    		) {
+	    		) throws DuplicateColumnException {
 	 		Report report  = new Report();
 	 		if(reportObj.get("reportId")!=null) {
 	 			report.setReportId(Long.parseLong( reportObj.get("reportId"))); 

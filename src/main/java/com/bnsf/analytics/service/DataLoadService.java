@@ -9,17 +9,20 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bnsf.analytics.exceptions.DuplicateColumnException;
 import com.bnsf.analytics.model.Report;
 import com.bnsf.analytics.model.ReportColumn;
 import com.bnsf.analytics.utils.DBConnection;
 import com.bnsf.analytics.utils.LoadToCloud;
 import com.bnsf.analytics.utils.ReportData;
 import com.bnsf.analytics.utils.Utility;
+import com.bnsf.analytics.model.DataSource;
 
 @Service
 public class DataLoadService {
@@ -49,13 +52,14 @@ public class DataLoadService {
 	private Utility utils;
 
 	
-	public List<ReportColumn>  getColumns(Report report) throws ClassNotFoundException, SQLException  {
+	public Set<ReportColumn>  getColumns(Report report) throws ClassNotFoundException, SQLException, DuplicateColumnException  {
 		Connection  dbConnection = null;
-		List<ReportColumn> columns = null;
+		Set<ReportColumn> columns = null;
+		DataSource datasource = report.getDataSource();
 		try {
-			dbConnection =connection.getConntection();
+			dbConnection =connection.getConntection(datasource.getUrl(), datasource.getDbUsername(), datasource.getDbPassword());
 			columns = reportData.getColumns(dbConnection, report); 	
-		} catch (Exception e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			connection.closeConnection(dbConnection);
@@ -74,10 +78,11 @@ public class DataLoadService {
 			DateFormat df = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss");
 			for (Report report : reportList) {
 				try {
+					DataSource datasource = report.getDataSource();
 					reportColumnList = columnsService.getColumns(report.getReportId());
 					System.out.println(report.getName() +"Start Time:: "+ df.format(Calendar.getInstance().getTime()));
 					reportdfolderPath =createReportFolder(report.getName(),FOLDER_PATH);
-					dbConnection =connection.getConntection();
+					dbConnection =connection.getConntection(datasource.getUrl(), datasource.getDbUsername(), datasource.getDbPassword());
 					reportData.extractData(dbConnection, report,reportdfolderPath,reportColumnList);
 					loadData.processLoad(reportdfolderPath, reportColumnList, report);
 					System.out.println(report.getName() +"End Time:: "+ df.format(Calendar.getInstance().getTime()));

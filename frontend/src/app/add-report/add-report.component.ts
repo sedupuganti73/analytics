@@ -1,6 +1,8 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatDialogTitle} from '@angular/material';
 import {AnalyticsService} from '../analytics.service';
+import { catchError } from 'rxjs/operators/catchError';
+
 
 @Component({
   selector: 'app-add-report',
@@ -17,9 +19,11 @@ export class AddReportComponent  implements OnInit {
   public reportId: number = null;
   public selectedDB: number;
   public loading = false;
+  public errorMessage = '';
 
   constructor(public dialogRef: MatDialogRef<AddReportComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any, private analyticsService: AnalyticsService) {
+    @Inject(MAT_DIALOG_DATA) public data: any, private analyticsService: AnalyticsService
+  ) {
         this.analyticsService.getDatabases().subscribe( data => {
             this.dbTypes = data;
             this.selectedDB = this.dbTypes[0].dsId;
@@ -48,12 +52,20 @@ export class AddReportComponent  implements OnInit {
 
   addReport(): void {
       this.loading = true;
+      this.errorMessage = '';
       this.analyticsService.
           addReport(this.name, this.query, this.selectedDB, this.createdBy)
           .subscribe(data => {
             this.loading = false;
             this.dialogRef.close(true);
-          });
+          },
+          err => {
+            console.log(err.error.message);
+            this.errorMessage = err.error.message;
+            this.loading = false;
+          }
+          )
+          ;
   }
 
   updateReport(): void {

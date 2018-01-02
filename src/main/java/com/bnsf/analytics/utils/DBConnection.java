@@ -40,10 +40,10 @@ public class DBConnection {
 	}
 	
 	
-	public Connection getConntection() throws SQLException, ClassNotFoundException {
+	public Connection getConntection(String url, String userName, String password) throws SQLException, ClassNotFoundException {
 		Connection connection = null;
 		///Class.forName("com.ncr.teradata.TeraDriver");
-		connection = DriverManager.getConnection("jdbc:teradata://TOPDWPD", "NPCRMDW", "DO89CR33");
+		connection = DriverManager.getConnection(url, userName, password);
 		return connection;
 	}
 	

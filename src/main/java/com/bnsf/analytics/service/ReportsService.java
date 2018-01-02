@@ -2,6 +2,7 @@ package com.bnsf.analytics.service;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -9,6 +10,7 @@ import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bnsf.analytics.exceptions.DuplicateColumnException;
 import com.bnsf.analytics.model.Report;
 import com.bnsf.analytics.model.ReportColumn;
 import com.bnsf.analytics.repositories.ColumnRepository;
@@ -38,12 +40,12 @@ public class ReportsService {
 	}
 	
 	
-	public void addReport(Report report) {
-		report = reportRepository.save(report);
+	public void addReport(Report report) throws DuplicateColumnException {
+		
 		try {
-			List<ReportColumn> columns = dataService.getColumns(report);
+			Set<ReportColumn> columns = dataService.getColumns(report);
 			columns.forEach((column)->columnRepository.save(column));
-			
+			report = reportRepository.save(report);
 		} catch(SQLException se) {
 			se.printStackTrace();
 		} catch (ClassNotFoundException e) {

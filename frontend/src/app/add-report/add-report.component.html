@@ -7,7 +7,7 @@
     </mat-progress-spinner>
     <h1 mat-dialog-title>{{title}}</h1>
     <form class="example-form" #form="ngForm" autocomplete="off">
-        
+            <p style="color:#f44336">{{errorMessage}}</p>
             <mat-form-field class="example-full-width" color="accent">
               <input matInput #reportName="ngModel" appCommandValidator placeholder="Report Name" [(ngModel)]="name" name="name" required>
               <mat-hint align="start"><strong>Name of report</strong> </mat-hint>
