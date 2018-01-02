@@ -53,7 +53,7 @@ public class LoadToCloud {
 		PartnerConnection connection = utility.getConnection();
 		String metaDataJson = generateMetaDatatoLoad(report,reportColumnList);
 		String dataSetId = createWaveDataSet(connection,metaDataJson,report);
-		reportFolderPath = reportFolderPath + report.getName()+".csv";
+		reportFolderPath = reportFolderPath+"\\" + report.getName()+".csv";
 		pushFileDataToWave(dataSetId,reportFolderPath,connection);
 		processData(dataSetId,connection);
 	}

@@ -68,17 +68,18 @@ public class DataLoadService {
 		//utils.getConnection();
 		List<Report> reportList =reportsService.getReports();
 		if (reportList != null && reportList.size() > 0) {
-			List<ReportColumn> reportCoulmnList = null;
+			List<ReportColumn> reportColumnList = null;
 			Connection  dbConnection = null;
 			String reportdfolderPath = null;
 			DateFormat df = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss");
 			for (Report report : reportList) {
 				try {
+					reportColumnList = columnsService.getColumns(report.getReportId());
 					System.out.println(report.getName() +"Start Time:: "+ df.format(Calendar.getInstance().getTime()));
 					reportdfolderPath =createReportFolder(report.getName(),FOLDER_PATH);
 					dbConnection =connection.getConntection();
-					reportCoulmnList = reportData.extractData(dbConnection, report,reportdfolderPath,true);
-					loadData.processLoad(reportdfolderPath, reportCoulmnList, report);
+					reportData.extractData(dbConnection, report,reportdfolderPath,reportColumnList);
+					loadData.processLoad(reportdfolderPath, reportColumnList, report);
 					System.out.println(report.getName() +"End Time:: "+ df.format(Calendar.getInstance().getTime()));
 				} catch (Exception e) {
 					e.printStackTrace();

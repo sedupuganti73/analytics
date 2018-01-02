@@ -61,26 +61,25 @@ public class ReportData {
 		return reportColumnList;
 	}
 	
-	public List<ReportColumn> extractData (Connection conn , Report report,String folderPath, boolean columdDetails) throws FileNotFoundException {
+	public void extractData (Connection conn , Report report,String folderPath, List<ReportColumn> reportColumnList) throws FileNotFoundException {
 		PreparedStatement preparedStmt = null;
 		ResultSet result = null;
-		List<ReportColumn> reportColumnList = null;
 		try {
 			preparedStmt =conn.prepareStatement(report.getQuery());
 		    result = preparedStmt.executeQuery();
-		    reportColumnList = getColumnDefintion(result.getMetaData(), report);
-			if (!columdDetails) {
-				String data = null;
-				String reportFileName = report.getName()+".csv";
-				PrintWriter pw = new PrintWriter(new File(folderPath,reportFileName));
-				while(result.next()) {
-					data =processResultSet(result,reportColumnList);
-					//System.out.println("Data :: "+ data);
-					pw.write(data);
-				}
-				pw.flush();
-				pw.close();
+		    
+			String data = null;
+			String reportFileName = report.getName()+".csv";
+			PrintWriter pw = new PrintWriter(new File(folderPath,reportFileName));
+			pw.write(processHeaders(reportColumnList));
+			pw.flush();
+			while(result.next()) {
+				data =processResultSet(result,reportColumnList);
+				//System.out.println("Data :: "+ data);
+				pw.write(data);
 			}
+			pw.flush();
+			pw.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -104,7 +103,21 @@ public class ReportData {
 				preparedStmt = null;
 			}
 		}
-		return reportColumnList;
+		
+	}
+	
+	private String processHeaders(List<ReportColumn> reportColumnList) {
+		StringBuilder databuilder = new StringBuilder();
+		for (ReportColumn column : reportColumnList) {
+			databuilder.append(column.getName());
+			databuilder.append(DELIMITER);
+		}
+		databuilder.trimToSize();
+	    databuilder.deleteCharAt(databuilder.lastIndexOf(DELIMITER));
+	    databuilder.append('\n');
+	    System.out.println("Headers ---->"+ databuilder.toString());
+		return databuilder.toString();
+		
 	}
 	
 	private String processResultSet(ResultSet result,List<ReportColumn> reportColumnList) throws SQLException {
@@ -127,8 +140,9 @@ public class ReportData {
 		    
 		    }
 		} 
+		databuilder.trimToSize();
 	    if (databuilder.length() > 2) {
-		    databuilder.substring(0, databuilder.length()-1);
+	    	databuilder.deleteCharAt(databuilder.lastIndexOf(DELIMITER));
 	    }
 	    databuilder.append('\n');
 		return databuilder.toString();
