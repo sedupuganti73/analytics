@@ -22,7 +22,8 @@ spring:
      url: https://test.salesforce.com/services/Soap/u/36.0
      username: sudarshanrao.edupuganti@bnsf.com.trial
      password: Test1234$uPU6CdotIMQ3ESGpE4C0h8xJq     
-
+  data:
+     path: C:\\Users\\c841456\\Downloads\\dataFolder	
 ###
 #   H2 Settings
 ###

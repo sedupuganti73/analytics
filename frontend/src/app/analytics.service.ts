@@ -69,6 +69,8 @@ export class AnalyticsService {
   deleteDatabase ( dsId: number): Observable<any> {
     return this.http.delete(this.prefix + '/ds/' + dsId);
   }
-
+  runReport( reportId: number ): Observable<any> {
+    return this.http.get(this.prefix + '/load/' + reportId);
+  }
 
 }

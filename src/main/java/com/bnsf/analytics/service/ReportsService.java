@@ -43,11 +43,16 @@ public class ReportsService {
 	public void addReport(Report report) throws DuplicateColumnException {
 		
 		try {
+			report = reportRepository.save(report);
 			Set<ReportColumn> columns = dataService.getColumns(report);
 			columns.forEach((column)->columnRepository.save(column));
-			report = reportRepository.save(report);
+			
 		} catch(SQLException se) {
 			se.printStackTrace();
+			if(report.getReportId()!=0L) {
+				deleteReport(report.getReportId());
+			}
+			
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

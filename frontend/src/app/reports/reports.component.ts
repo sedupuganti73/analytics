@@ -38,7 +38,15 @@ export class ReportsComponent implements OnInit {
         });
       });
   }
-
+  runReport(reportId: string): void {
+    this.analyticsService.runReport(+reportId)
+    .subscribe(result => {
+      this.snackBar.open('Report triggered', null,
+      {
+        duration: 1000
+      });
+    });
+  }
 
   addEditReport(reportId: string): void {
     let dialogRef;

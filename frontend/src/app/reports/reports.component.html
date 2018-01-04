@@ -50,7 +50,9 @@
                   <button mat-mini-fab matTooltip="view columns" color="primary"  [routerLink]="['/columns', element.reportId]">
                     <mat-icon >view_column</mat-icon>
                   </button>  
-                   
+                  <button mat-mini-fab style="background-color: #18BC9C"  matTooltip="run report" (click)="runReport(element.reportId)">
+                    <mat-icon >play_arrow</mat-icon>
+                  </button>  
                   <button mat-mini-fab style="background-color: #69f0ae"  matTooltip="history">
                       <mat-icon >history</mat-icon>
                     </button>    

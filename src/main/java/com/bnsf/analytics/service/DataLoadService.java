@@ -13,6 +13,7 @@ import java.util.Set;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.bnsf.analytics.exceptions.DuplicateColumnException;
@@ -27,8 +28,8 @@ import com.bnsf.analytics.model.DataSource;
 @Service
 public class DataLoadService {
 
-
-	private static final String FOLDER_PATH ="C:\\Users\\B031526\\Downloads\\dataFolder";
+	@Value("${spring.data.path}")
+	private  String FOLDER_PATH;
 
 	
 	
