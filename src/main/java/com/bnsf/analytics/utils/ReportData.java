@@ -8,14 +8,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-
-import javax.persistence.Column;
 
 import org.springframework.stereotype.Component;
 
@@ -132,7 +128,10 @@ public class ReportData {
 			    databuilder.append(result.getString(columnName));
 			    databuilder.append(DELIMITER);
 		    } else if ('D' == column.getType()) {
-		    	 databuilder.append(result.getDate(columnName));
+		    	 Date columnDate =  result.getDate(columnName);
+		    	 if (columnDate != null) {
+		    	     databuilder.append(result.getDate(columnName));
+		    	 }
 		    	 databuilder.append(DELIMITER);
 		    } else if ('I' == column.getType()) {
 		    	databuilder.append(result.getInt(columnName));

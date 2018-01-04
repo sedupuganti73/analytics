@@ -72,31 +72,31 @@ public class DataLoadService {
 		//utils.getConnection();
 		List<Report> reportList =reportsService.getReports();
 		if (reportList != null && reportList.size() > 0) {
-			List<ReportColumn> reportColumnList = null;
-			Connection  dbConnection = null;
-			String reportdfolderPath = null;
-			DateFormat df = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss");
 			for (Report report : reportList) {
-				try {
-					DataSource datasource = report.getDataSource();
-					reportColumnList = columnsService.getColumns(report.getReportId());
-					System.out.println(report.getName() +"Start Time:: "+ df.format(Calendar.getInstance().getTime()));
-					reportdfolderPath =createReportFolder(report.getName(),FOLDER_PATH);
-					dbConnection =connection.getConntection(datasource.getUrl(), datasource.getDbUsername(), datasource.getDbPassword());
-					reportData.extractData(dbConnection, report,reportdfolderPath,reportColumnList);
-					loadData.processLoad(reportdfolderPath, reportColumnList, report);
-					System.out.println(report.getName() +"End Time:: "+ df.format(Calendar.getInstance().getTime()));
-				} catch (Exception e) {
-					e.printStackTrace();
-				} finally {
-					connection.closeConnection(dbConnection);
-				}
-				
+				loadData(report);
 			}
-			
 		}
-				 
-
+	}
+	
+	public void loadData(Report report) {
+		List<ReportColumn> reportColumnList = null;
+		Connection  dbConnection = null;
+		String reportdfolderPath = null;
+		DateFormat df = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss");
+		try {
+			DataSource datasource = report.getDataSource();
+			reportColumnList = columnsService.getColumns(report.getReportId());
+			System.out.println(report.getName() +"Start Time:: "+ df.format(Calendar.getInstance().getTime()));
+			reportdfolderPath =createReportFolder(report.getName(),FOLDER_PATH);
+			dbConnection =connection.getConntection(datasource.getUrl(), datasource.getDbUsername(), datasource.getDbPassword());
+			reportData.extractData(dbConnection, report,reportdfolderPath,reportColumnList);
+			loadData.processLoad(reportdfolderPath, reportColumnList, report);
+			System.out.println(report.getName() +"End Time:: "+ df.format(Calendar.getInstance().getTime()));
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			connection.closeConnection(dbConnection);
+		}
 	}
 
 	
