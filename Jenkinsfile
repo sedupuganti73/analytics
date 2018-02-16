@@ -9,8 +9,8 @@ pipeline {
      ARTIFACTORY_UPLOAD_JOB_NUMBER = ""
    }
     parameters { 
-     string(defaultValue: 'https://github.bnsf.com/RS/rmtui.git', description: 'enter git url', name: 'gitURL')
-     string(defaultValue: 'master', description: 'enter git brach', name: 'gitBranch')
+     /*string(defaultValue: 'https://github.bnsf.com/RS/rmtui.git', description: 'enter git url', name: 'gitURL')
+     string(defaultValue: 'master', description: 'enter git brach', name: 'gitBranch')*/
      string(defaultValue: 'rmtui', description: 'app name used by chef and bluemix', name: 'app_name')
      string(defaultValue: 'dev', description: 'chef environment, skips chef deployment if empty', name: 'chef_environment')
      string(defaultValue: 'development', description: 'bluemix space, skips bluemix deployment if empty', name: 'bmx_environment')
@@ -30,14 +30,14 @@ pipeline {
     stages {
         
 
-        stage ('Checkout Source') {
+        /*stage ('Checkout Source') {
             steps{
                 echo "checking out ${params.gitURL}/${params.gitBranch} "
                 git url: "${params.gitURL}", branch: "${params.gitBranch}", poll:true
                 
             }
             
-        }
+        }*/
     
         stage ('UI unit test and build') {
             steps {
