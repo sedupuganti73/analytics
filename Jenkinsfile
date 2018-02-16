@@ -39,7 +39,7 @@ pipeline {
             
         }*/
     
-        stage ('UI unit test and build') {
+        stage ('UI unit test') {
             steps {
                 script {
                         
