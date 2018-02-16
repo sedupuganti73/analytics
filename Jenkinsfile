@@ -53,12 +53,7 @@ pipeline {
                                             sh "node_modules/@angular/cli/bin/ng test --single-run --code-coverage --browser PhantomJS"
                                             publishHTML([allowMissing: true, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'coverage', reportFiles: 'index.html', reportName: 'Jasmine Report'])
                                         }
-                                        if(params.chef_environment.trim()=='dev') {
-                                             sh "npm run buildDev"
-                                        } else {
-                                            sh "npm run build"
-                                        }
-                                       
+                                      
                                     }
                                 
                             }
@@ -66,6 +61,33 @@ pipeline {
                 }
    
             
+        }
+        
+         stage ('UI build uncompressed') {
+            when {
+                   branch 'development' 
+            } 
+            steps {
+                script {
+                            dir('frontend') {       
+                                          sh "npm run buildDev"
+                                        
+                            }
+                        }
+                }  
+        }
+        
+        stage ('UI build compressed') {
+            when {
+                   branch 'master' 
+            } 
+            steps {
+                script {
+                            dir('frontend') {       
+                                   sh "npm run build"
+                            }
+                        }
+                }
         }
     
         stage ('Backend unit test and build') {
