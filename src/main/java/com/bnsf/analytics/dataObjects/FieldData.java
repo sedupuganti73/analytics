@@ -8,59 +8,63 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 public class FieldData {
 	
 	@JsonInclude(JsonInclude.Include.NON_NULL) 
-	private String description;
-	private String fullyQualifiedName;
-	private String label;
-	private String name;
+	private String description = null;
+	private String fullyQualifiedName = null;
+	private String label = null;
+	private String name = null;
+	/*
 	@JsonProperty("isSystemField")
 	private Boolean isSystemField;
 	@JsonProperty("isUniqueId")
-	private Boolean isUniqueId;
+	private Boolean isUniqueId ;
 	@JsonProperty("isMultiValue")
 	private Boolean isMultiValue;
-	private String type;
+	*/
+	private String type = null;
 	private String defaultValue;
 	@JsonInclude(JsonInclude.Include.NON_NULL) 
-	private Integer precision;
+	private Integer precision = null;
 	@JsonInclude(JsonInclude.Include.NON_NULL) 
-	private Integer scale;
-	private String format;
-	private Integer fiscalMonthOffset;
+	private Integer scale = null;
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	private String format = null;
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	private Integer fiscalMonthOffset = null;
 	
 	public FieldData(String name , String label, String objectName, String type) {
 		this.name = name;
 		this.fullyQualifiedName = objectName+'.'+ name;
 		this.label = label;
-		this.isSystemField = Boolean.FALSE;
-		this.isUniqueId = Boolean.FALSE;
-		this.isMultiValue = Boolean.FALSE;
+		//this.isSystemField = Boolean.FALSE;
+		//this.isUniqueId = Boolean.FALSE;
+		//this.isMultiValue = Boolean.FALSE;
 		this.type = type;
-		this.description ="";
+		this.description =null;
 	}
 	
 	public FieldData(String name , String label, String objectName, String type,String format, Integer fiscalMonthOffset) {
 		this.name = name;
 		this.fullyQualifiedName = objectName+'.'+ name;
 		this.label = label;
-		this.isSystemField = Boolean.FALSE;
-		this.isUniqueId = Boolean.FALSE;
+		//this.isSystemField = Boolean.FALSE;
+		//this.isUniqueId = Boolean.FALSE;
 		this.type = type;
 		this.format = format;
 		this.fiscalMonthOffset = fiscalMonthOffset;
-		this.description ="";
+		this.description =null;
 	}
 	
 	public FieldData(String name , String label, String objectName, String type,String format, String defaultValue,Integer precision,Integer scale) {
 		this.name = name;
 		this.fullyQualifiedName = objectName+'.'+ name;
 		this.label = label;
-		this.isSystemField = Boolean.FALSE;
+		//this.isSystemField = Boolean.FALSE;
 		this.type = type;
 		this.format = format;
 		this.defaultValue = defaultValue;
 		this.precision = precision;
 		this.scale = scale;
-		this.description ="";
+		this.description =null;
 	}
 	
 	/**
@@ -114,13 +118,15 @@ public class FieldData {
 	/**
 	 * @return the isSystemField
 	 */
+	/*
 	@JsonProperty("isSystemField")
 	public Boolean isSystemField() {
 		return isSystemField;
-	}
+	}*/
 	/**
 	 * @param isSystemField the isSystemField to set
 	 */
+	/*
 	@JsonProperty("isSystemField")
 	public void setSystemField(Boolean isSystemField) {
 		this.isSystemField = isSystemField;
@@ -128,31 +134,35 @@ public class FieldData {
 	/**
 	 * @return the isUniqueId
 	 */
+	/*
 	@JsonProperty("isUniqueId")
 	public Boolean isUniqueId() {
 		return isUniqueId;
-	}
+	}*/
 	/**
 	 * @param isUniqueId the isUniqueId to set
 	 */
+	/*
 	@JsonProperty("isUniqueId")
 	public void setUniqueId(Boolean isUniqueId) {
 		this.isUniqueId = isUniqueId;
-	}
+	}*/
 	/**
 	 * @return the isMultiValue
 	 */
+	/*
 	@JsonProperty("isMultiValue")
 	public Boolean isMultiValue() {
 		return isMultiValue;
-	}
+	}*/
 	/**
 	 * @param isMultiValue the isMultiValue to set
 	 */
+	/*
 	@JsonProperty("isMultiValue")
 	public void setMultiValue(Boolean isMultiValue) {
 		this.isMultiValue = isMultiValue;
-	}
+	}*/
 	/**
 	 * @return the type
 	 */

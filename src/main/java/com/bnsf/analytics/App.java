@@ -12,10 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import groovy.util.logging.Log4j;
 
 
-/**
- * Hello world!
- *
- */
+
 @Log4j
 @RestController
 @EnableAutoConfiguration

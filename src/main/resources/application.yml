@@ -21,9 +21,19 @@ spring:
   SFDC:
      url: https://test.salesforce.com/services/Soap/u/36.0
      username: sudarshanrao.edupuganti@bnsf.com.trial
-     password: Test1234$uPU6CdotIMQ3ESGpE4C0h8xJq     
+     password: Test123$1ASixlThZCmbKh7cC4wZFjar3     
   data:
-     path: C:\\Users\\c841456\\Downloads\\dataFolder	
+     path: C:\\Users\\B031526\\Downloads\\dataFolder
+     
+logging:
+  level:
+    org.springframework.web: ERROR
+    com.bnsf: ERROR
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file: application.log     
+
 ###
 #   H2 Settings
 ###

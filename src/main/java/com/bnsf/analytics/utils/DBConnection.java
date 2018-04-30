@@ -7,6 +7,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 /**
@@ -16,6 +18,8 @@ import org.springframework.stereotype.Component;
 
 @Component 
 public class DBConnection {
+	
+	private static final Logger logger = LoggerFactory.getLogger(DBConnection.class);
 	
 	private String databaseType;
 	private String userName;
@@ -41,22 +45,29 @@ public class DBConnection {
 	
 	
 	public Connection getConntection(String url, String userName, String password) throws SQLException, ClassNotFoundException {
+		logger.info("Start : DBConnection.getConntection", url, userName);
 		Connection connection = null;
-		///Class.forName("com.ncr.teradata.TeraDriver");
-		connection = DriverManager.getConnection(url, userName, password);
+		try {
+		    connection = DriverManager.getConnection(url, userName, password);
+		} catch(Exception ex) {
+			logger.error("DBConnection.getConntection", ex.getMessage());
+		}
+		logger.info("End : DBConnection.getConntection", url, userName);
 		return connection;
 	}
 	
 	
 	public void closeConnection(Connection connection) {
+		logger.info("Start : DBConnection.closeConnection");
 		if (connection != null) {
 			try {
 				connection.close();
 			} catch (SQLException e) {
-				e.printStackTrace();
+				logger.error("DBConnection.getConntection", e.getMessage());
 			}
 			connection = null;
 		}
+		logger.info("End : DBConnection.closeConnection");
 	}
 	
 	

@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.codehaus.jackson.map.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -27,7 +29,7 @@ import com.bnsf.analytics.model.DataSource;
 
 @Service
 public class DataLoadService {
-
+	private static final Logger logger = LoggerFactory.getLogger(DataLoadService.class);
 	@Value("${spring.data.path}")
 	private  String FOLDER_PATH;
 
@@ -54,6 +56,7 @@ public class DataLoadService {
 
 	
 	public Set<ReportColumn>  getColumns(Report report) throws ClassNotFoundException, SQLException, DuplicateColumnException  {
+		logger.info("Start : DataLoadService.getColumns");
 		Connection  dbConnection = null;
 		Set<ReportColumn> columns = null;
 		DataSource datasource = report.getDataSource();
@@ -61,29 +64,32 @@ public class DataLoadService {
 			dbConnection =connection.getConntection(datasource.getUrl(), datasource.getDbUsername(), datasource.getDbPassword());
 			columns = reportData.getColumns(dbConnection, report); 	
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("DataLoadService.getColumns", e.getMessage());
 		} finally {
 			connection.closeConnection(dbConnection);
 		}
+		logger.info("End : DataLoadService.getColumns");
 		return columns;
 	}
 	
 	
 	public void  loadData()  {
-		//utils.getConnection();
+		logger.info("Start : DataLoadService.loadData");
 		List<Report> reportList =reportsService.getReports();
 		if (reportList != null && reportList.size() > 0) {
 			for (Report report : reportList) {
 				loadData(report);
 			}
 		}
+		logger.info("End : DataLoadService.loadData");
 	}
 	
 	public void loadData(Report report) {
+		logger.info("Start : DataLoadService.loadData(report)");
 		List<ReportColumn> reportColumnList = null;
 		Connection  dbConnection = null;
 		String reportdfolderPath = null;
-		DateFormat df = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss");
+		DateFormat df = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss"); 
 		try {
 			DataSource datasource = report.getDataSource();
 			reportColumnList = columnsService.getColumns(report.getReportId());
@@ -95,13 +101,16 @@ public class DataLoadService {
 			System.out.println(report.getName() +"End Time:: "+ df.format(Calendar.getInstance().getTime()));
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.error("DataLoadService.loadData(report)", e.getMessage());
 		} finally {
 			connection.closeConnection(dbConnection);
 		}
+		logger.info("End : DataLoadService.loadData(report)");
 	}
 
 	
 	private  boolean isJSONValid(String jsonInString ) {
+		logger.info("Start : DataLoadService.isJSONValid");
 		boolean isValid = false;
 	    try {
 	       final ObjectMapper mapper = new ObjectMapper();
@@ -110,13 +119,14 @@ public class DataLoadService {
 	    } catch (IOException e) {
 	       e.printStackTrace();
 	    }
-	    
+	    logger.info("End : DataLoadService.isJSONValid");
 	    return isValid;
 	  }
 	
 	
 	
 	private String createReportFolder(String reportName, String filePath) {
+		logger.info("Start : DataLoadService.createReportFolder");
 		Date today = Calendar.getInstance().getTime();
 		DateFormat df = new SimpleDateFormat("yyyyy-mm-dd");
 		StringBuilder reportFolderBuilder = new StringBuilder();
@@ -127,7 +137,7 @@ public class DataLoadService {
 		if (!reportFolder.exists()) {
 			reportFolder.mkdirs();
 		}
-		
+		logger.info("End : DataLoadService.createReportFolder");
 		return reportFolder.getAbsolutePath();
 	}
 
