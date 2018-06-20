@@ -11,58 +11,87 @@
             <mat-form-field class="example-full-width" color="accent">
               <input matInput #reportName="ngModel" appCommandValidator placeholder="Report Name" [(ngModel)]="name" name="name" required>
               <mat-hint align="start"><strong>Name of report</strong> </mat-hint>
-              
+
               <mat-error *ngIf="reportName.invalid && (reportName.dirty || reportName.touched) && reportName.errors.forbiddenCommand">
                     Comand cannot start with <strong>open</strong>.
-              </mat-error>  
+              </mat-error>
               <mat-error *ngIf="reportName.invalid && (reportName.dirty || reportName.touched) && reportName.errors.required">
                     Name is <strong>required</strong>
               </mat-error>
             </mat-form-field>
-          
+
             <br><br>
-            
+
             <mat-form-field color="accent"class="example-full-width" >
-                
+
                     <mat-select #dbType="ngModel" placeholder="Type"  [(ngModel)]="selectedDB" name="type" >
                         <mat-option *ngFor="let type of dbTypes" [value]="type.dsId" >
                           {{ type.name }}
                         </mat-option>
-                      </mat-select>  
+                      </mat-select>
                       <mat-hint align="start"><strong >DB Type</strong> </mat-hint>
-                
-                </mat-form-field>  
-                <br><br>  
+
+                </mat-form-field>
+                <br><br>
 
               <mat-form-field class="example-full-width" color="accent"  >
                   <textarea rows="5" matInput placeholder="Query" [(ngModel)]="query" name="query" required></textarea>
                   <mat-hint align="start"><strong >Query to generate report</strong> </mat-hint>
-                  
+
                 </mat-form-field>
               <br><br>
-              
-             
+              <mat-form-field class="example-full-width" color="accent"  >
+               <textarea rows="5" matInput placeholder="recordCountQuery" [(ngModel)]="recordCountQuery" name="recordCountQuery" ></textarea>
+                  <mat-hint align="start"><strong >Query to generate record count</strong> </mat-hint>
+
+              </mat-form-field>
+              <br><br>
+               <mat-form-field color="accent"class="example-full-width" >
+
+                    <mat-select #dbType="ngModel" placeholder="Type"  [(ngModel)]="loadType" name="loadType" >
+                        <mat-option *ngFor="let type of loadTypes" [value]="type" >
+                          {{ type }}
+                        </mat-option>
+                      </mat-select>
+                      <mat-hint align="start"><strong >Load Type</strong> </mat-hint>
+
+                </mat-form-field>
+                <br><br>
+                <mat-form-field color="accent" class="example-full-width">
+                      <input matInput #creator="ngModel" placeholder="Run Priority" appUrlValidator  [(ngModel)]="priority" name="priority" required>
+                      <mat-hint align="start"><strong >Priority</strong> </mat-hint>
+                </mat-form-field>
+
+
+                <br><br>
+                <mat-form-field color="accent" class="example-full-width">
+                      <input matInput #creator="ngModel" placeholder="Hour To Run" appUrlValidator  [(ngModel)]="runTime" name="runTime">
+                      <mat-hint align="start"><strong >Hour To Run</strong> </mat-hint>
+                </mat-form-field>
+
+
+                <br><br>
                 <mat-form-field color="accent" class="example-full-width">
                       <input matInput #creator="ngModel" placeholder="Created By" appUrlValidator  [(ngModel)]="createdBy" name="createdBy" required>
                       <mat-hint align="start"><strong >Report Creator user Id</strong> </mat-hint>
-                 
+
                       <mat-error *ngIf="creator.invalid && (creator.dirty || creator.touched) && creator.errors.required">
                               Creator is <strong>required</strong>
                         </mat-error>
                 </mat-form-field>
-                  
-                
+
+
                 <br><br>
-            
+
               <button *ngIf="reportId==null" mat-raised-button [disabled]="form.invalid" (click)="addReport()" color="primary">
                   <mat-icon aria-label="Submit">add</mat-icon>&nbsp;Add Report
-              </button>  
+              </button>
               <button *ngIf="reportId!=null" mat-raised-button [disabled]="form.invalid" (click)="updateReport()" color="primary">
                   <mat-icon aria-label="Submit">create</mat-icon>&nbsp;Update Report
-              </button>  
+              </button>
 
 
       </form>
 
-     
+
   </div>

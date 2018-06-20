@@ -63,12 +63,12 @@ public class DataLoadService {
 		try {
 			dbConnection =connection.getConntection(datasource.getUrl(), datasource.getDbUsername(), datasource.getDbPassword());
 			columns = reportData.getColumns(dbConnection, report); 	
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			logger.error("DataLoadService.getColumns", e.getMessage());
 		} finally {
 			connection.closeConnection(dbConnection);
 		}
-		logger.info("End : DataLoadService.getColumns");
+		logger.info("End : DataLoadService.getColumns"); 
 		return columns;
 	}
 	
@@ -93,12 +93,13 @@ public class DataLoadService {
 		try {
 			DataSource datasource = report.getDataSource();
 			reportColumnList = columnsService.getColumns(report.getReportId());
-			System.out.println(report.getName() +"Start Time:: "+ df.format(Calendar.getInstance().getTime()));
-			reportdfolderPath =createReportFolder(report.getName(),FOLDER_PATH);
+			logger.debug(report.getName() +"Start Time:: "+ df.format(Calendar.getInstance().getTime()));
+			
+			//reportdfolderPath =createReportFolder(report.getName(),FOLDER_PATH);
 			dbConnection =connection.getConntection(datasource.getUrl(), datasource.getDbUsername(), datasource.getDbPassword());
 			reportData.extractData(dbConnection, report,reportdfolderPath,reportColumnList);
-			loadData.processLoad(reportdfolderPath, reportColumnList, report);
-			System.out.println(report.getName() +"End Time:: "+ df.format(Calendar.getInstance().getTime()));
+			//loadData.processLoad(reportdfolderPath, reportColumnList, report);
+			logger.debug(report.getName() +"End Time:: "+ df.format(Calendar.getInstance().getTime()));
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("DataLoadService.loadData(report)", e.getMessage());

@@ -53,6 +53,25 @@ public class ReportsController {
 	 		report.setName(reportObj.get("name"));
 	 		report.setQuery(reportObj.get("query"));
 	 		report.setCreatedBy(reportObj.get("createdBy"));
+	 		String loadType = reportObj.get("type");
+	 		if (loadType != null) {
+	 			if ("Once".equalsIgnoreCase(loadType)) {
+	 				report.setLoadType(0);
+	 			} else if ("Daily".equalsIgnoreCase(loadType)) {
+	 				report.setLoadType(1);
+	 			} else if ("Hourly".equalsIgnoreCase(loadType)) {
+	 				report.setLoadType(2);
+	 			}
+	 		}
+	 		if (reportObj.get("priority") != null) {
+	 			report.setPriority(Integer.parseInt(reportObj.get("priority")));
+	 		}
+	 		if (reportObj.get("runTime") != null) {
+	 			report.setRunTime(Integer.parseInt(reportObj.get("runTime")));
+	 		}
+	 		if (reportObj.get("recordCountQuery") != null) {
+	 			report.setRecordCountQuery(reportObj.get("recordCountQuery"));
+	 		}
 	 		reportsService.addReport(report);
 	 		return report;
 	    }

@@ -41,6 +41,19 @@ public class Report {
 	@Lob
 	private String query;
 	
+	@Lob
+	@Column(name = "Record_CNT_Query", nullable = true)
+	private String recordCountQuery;
+	
+	@Column(name = "Load_Type", nullable = false, columnDefinition = "int default 0")
+	private int loadType;
+	
+	@Column(name = "Run_Time", nullable = false,columnDefinition = "int default 0")
+	private int runTime =0;
+	
+	@Column(name = "Priority", nullable = false, columnDefinition = "int default 0")
+	private int priority;
+	
 	
 	private String label;
 	
@@ -92,6 +105,54 @@ public class Report {
 	}
 	public void setDataSource(DataSource dataSource) {
 		this.dataSource = dataSource;
+	}
+	/**
+	 * @return the loadType
+	 */
+	public int getLoadType() {
+		return loadType;
+	}
+	/**
+	 * @param loadType the loadType to set
+	 */
+	public void setLoadType(int loadType) {
+		this.loadType = loadType;
+	}
+	/**
+	 * @return the time
+	 */
+	public int getRunTime() {
+		return runTime;
+	}
+	/**
+	 * @param time the time to set
+	 */
+	public void setRunTime(int runTime) {
+		this.runTime = runTime;
+	}
+	/**
+	 * @return the priority
+	 */
+	public int getPriority() {
+		return priority;
+	}
+	/**
+	 * @param priority the priority to set
+	 */
+	public void setPriority(int priority) {
+		this.priority = priority;
+	}
+	/**
+	 * @return the recordCountQuery
+	 */
+	public String getRecordCountQuery() {
+		return recordCountQuery;
+	}
+	/**
+	 * @param recordCountQuery the recordCountQuery to set
+	 */
+	public void setRecordCountQuery(String recordCountQuery) {
+		this.recordCountQuery = recordCountQuery;
 	}
 
 }

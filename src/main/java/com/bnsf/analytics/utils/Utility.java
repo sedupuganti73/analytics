@@ -27,12 +27,12 @@ public class Utility {
     private String password;
 	
 	public PartnerConnection  getConnection()  {
-		logger.info("Start : Utility.getConntection", sfdcUrl, userName);
+		logger.info("Start : Utility.getConntection", sfdcUrl, userName); 
 		PartnerConnection  connection = null;
 		try {
-			System.out.println("sfdcUrl==========>"+ sfdcUrl);
-			System.out.println("userName==========>"+ userName);
-			System.out.println("password==========>"+ password);
+			//System.out.println("sfdcUrl==========>"+ sfdcUrl);
+			//System.out.println("userName==========>"+ userName);
+			//System.out.println("password==========>"+ password);
 			ConnectorConfig config = new ConnectorConfig();
 			config.setUsername(userName);
 			config.setPassword(password);
@@ -40,6 +40,9 @@ public class Utility {
 			config.setProxy(PROXY_URL, PROXY_PORT);
 			connection = new PartnerConnection (config); 
 		} catch (ConnectionException ce) {
+			System.out.println("sfdcUrl==========>"+ sfdcUrl);
+			System.out.println("userName==========>"+ userName);
+			System.out.println("password==========>"+ password);
 			logger.error("Utility.getConntection", ce.getMessage());
 		}
 		logger.info("End : Utility.getConntection", sfdcUrl, userName);
@@ -47,6 +50,7 @@ public class Utility {
 	}
 	
 	public boolean isConnectionValid(PartnerConnection connection) {
+		logger.info("Start : Utility.getConntection");
 		boolean connectionValid = true;
 		try {
 			GetUserInfoResult resut =connection.getUserInfo();
@@ -54,7 +58,7 @@ public class Utility {
 			logger.error("Utility.isConnectionValid", ex.getMessage());
 			connectionValid = false;
 		}
-		
+		logger.info("End : Utility.getConntection");
 		return connectionValid;
 	}
 

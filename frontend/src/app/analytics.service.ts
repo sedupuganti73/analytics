@@ -14,15 +14,15 @@ export class AnalyticsService {
     return this.http.get(this.prefix + '/reports/' + reportId);
   }
 
-  addReport( name: string, query: string, dataSource: number, createdBy: string ): Observable<any> {
+  addReport( name: string, query: string, dataSource: number, createdBy: string, loadType: string, priority: string ,runTime: string ,recordCountQuery: string  ): Observable<any> {
     return this.http.post(this.prefix + '/reports/',
-    { name: name,  query: query , label: '', dataSource: dataSource, createdBy: createdBy});
+    { name: name,  query: query , label: '', dataSource: dataSource, createdBy: createdBy, type: loadType, priority: priority, runTime: runTime, recordCountQuery: recordCountQuery});
   }
 
-  updateReport( reportId: number, name: string, query: string, dataSource: number, createdBy: string ): Observable<any> {
+  updateReport( reportId: number, name: string, query: string, dataSource: number, createdBy: string, loadType: string, priority: string ,runTime: string ,recordCountQuery: string  ): Observable<any> {
     return this.http.post(
       this.prefix + '/reports/',
-      {reportId: reportId, name: name,  query: query , label: '', dataSource: dataSource, createdBy: createdBy});
+      {reportId: reportId, name: name,  query: query , label: '', dataSource: dataSource, createdBy: createdBy, type: loadType, priority: priority, runTime: runTime, recordCountQuery: recordCountQuery});
   }
 
   deleteReport ( reportId: number): Observable<any> {

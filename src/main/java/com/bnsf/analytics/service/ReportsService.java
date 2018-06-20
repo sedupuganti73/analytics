@@ -6,7 +6,6 @@ import java.util.Set;
 
 import javax.transaction.Transactional;
 
-import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +15,8 @@ import com.bnsf.analytics.exceptions.DuplicateColumnException;
 import com.bnsf.analytics.model.Report;
 import com.bnsf.analytics.model.ReportColumn;
 import com.bnsf.analytics.repositories.ColumnRepository;
+import com.bnsf.analytics.repositories.ReportHistoryRepository;
 import com.bnsf.analytics.repositories.ReportRepository;
-import com.bnsf.analytics.utils.ReportData;
 
 import groovy.util.logging.Log4j;
 
@@ -34,6 +33,9 @@ public class ReportsService {
 
 	@Autowired
 	private ColumnRepository columnRepository;
+	
+	@Autowired
+	private ReportHistoryRepository reportHistoryRepository;
 	
 	public List<Report> getReports()  {
 		return reportRepository.findAll();
@@ -69,8 +71,10 @@ public class ReportsService {
 	public void deleteReport (Long reportId) {
 		logger.info("Start : ReportService.deleteReport");
 		
-		reportRepository.delete(reportId);
+		
 		columnRepository.deleteByReportId(reportId);
+		reportHistoryRepository.deleteByReportId(reportId);
+		reportRepository.delete(reportId);
 		logger.info("End : ReportService.deleteReport");
 	}
 }

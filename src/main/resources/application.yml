@@ -24,6 +24,7 @@ spring:
      password: Test123$1ASixlThZCmbKh7cC4wZFjar3     
   data:
      path: C:\\Users\\B031526\\Downloads\\dataFolder
+     file-size: 10000000
      
 logging:
   level:

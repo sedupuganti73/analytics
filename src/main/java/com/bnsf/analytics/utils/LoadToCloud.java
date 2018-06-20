@@ -48,9 +48,15 @@ public class LoadToCloud {
 	private static final String COMMA = "|";
 	private static final String DOUBLE_QUOTE = "\"";
 	private static final String UTF8_CHARACTERSET = "UTF-8";
+	private static final String INSERT ="Insert";
+	private static final String UPDATE ="Update";
 	
 	@Autowired
 	private Utility utility;
+	
+	public PartnerConnection getConnection() {
+		return utility.getConnection();
+	}
 	
 	
 	public void processLoad(String reportFolderPath, List<ReportColumn> reportColumnList, Report report) throws Exception {
@@ -62,6 +68,14 @@ public class LoadToCloud {
 		pushFileDataToWave(dataSetId,reportFolderPath,connection);
 		processData(dataSetId,connection);
 		logger.info("End : LoadToCloud.processLoad");
+	}
+	
+	public String createDataSetDefintion(PartnerConnection connection, Report report,List<ReportColumn> reportColumnList) throws Exception {
+		logger.info("Start : LoadToCloud.createDataSetDefintion");
+		String metaDataJson = generateMetaDatatoLoad(report,reportColumnList);
+		String dataSetId = createWaveDataSet(connection,metaDataJson,report);
+		logger.info("End : LoadToCloud.createDataSetDefintion");
+		return dataSetId;
 	}
 	
 	
@@ -76,7 +90,7 @@ public class LoadToCloud {
         sobj.setField("MetadataJson",metaDataJson.getBytes());
         sobj.setField("Operation","Overwrite");
         sobj.setField("Action","None");
-        SaveResult[] results = connection.create(new SObject[] { sobj });
+        SaveResult[] results = saveAndRetry(connection,new SObject[] { sobj });
         for(SaveResult sv:results) {
         	if(sv.isSuccess()) {
         		dataSetId = sv.getId();
@@ -219,6 +233,52 @@ public class LoadToCloud {
 	    return files;
 	}
 	
+	public String publishDataToWave(PartnerConnection connection,byte[] byteArray,String parentId, int partNumber) throws Exception {
+		logger.info("Start : LoadToCloud.publishDataToWave");
+		/*if (!utility.isConnectionValid(connection)) {
+        	connection = utility.getConnection();
+        }*/
+		String rowId= null;
+		SObject sobj = new SObject();
+        sobj.setType("InsightsExternalDataPart"); 
+        sobj.setField("DataFile",byteArray);
+        sobj.setField("InsightsExternalDataId", parentId);
+        sobj.setField("PartNumber",partNumber); //Part numbers should start at 1
+        SaveResult[] results = saveAndRetry(connection,(new SObject[] { sobj }));
+        for(SaveResult sv:results) {
+            if(sv.isSuccess()) {
+           	    rowId = sv.getId();
+            }
+        }
+        logger.info("End : LoadToCloud.publishDataToWave");
+        return rowId;
+	}
+	
+	private  SaveResult[]  saveAndRetry(PartnerConnection connection, SObject[] objArray) throws Exception {
+		return saveAndRetry(connection,objArray,INSERT);
+	}
+	 
+	private SaveResult[]  saveAndRetry(PartnerConnection connection, SObject[] objArray,String operation) throws Exception {
+		logger.info("Start : LoadToCloud.saveAndRetry");
+		SaveResult[] results = null;
+		for (int i=0; i< 4; i++ ) {
+			try {
+				if (operation.equalsIgnoreCase(INSERT)) {
+				    results = connection.create(objArray);
+				} else {
+					results = connection.update(objArray);
+				}
+		        break;
+			} catch (ConnectionException ex) {
+				ex.printStackTrace();
+				logger.error("ReportData.extractData", ex.getMessage());
+				continue;
+			}
+		}
+		logger.info("End : LoadToCloud.saveAndRetry");
+		return results;
+	}
+	
 	public String writeFileData(String parentId, int partNumber, File currentfile, PartnerConnection connection) throws ConnectionException {
 		logger.info("Start : LoadToCloud.writeFileData");
 		if (!utility.isConnectionValid(connection)) {
@@ -267,18 +327,17 @@ public class LoadToCloud {
 		return bytesArray;
 	}
 	
-	private String processData(String dataSetId, PartnerConnection connection) throws ConnectionException {
+	public String processData(String dataSetId, PartnerConnection connection) throws Exception {
 		logger.info("Start : LoadToCloud.processData");
-		if (!utility.isConnectionValid(connection)) {
+		/*if (!utility.isConnectionValid(connection)) {
         	connection = utility.getConnection();
-        }
+        }*/
 		String rowId= null;
 		SObject sobj = new SObject();
 		sobj.setType("InsightsExternalData");
 		sobj.setField("Action","Process");
 		sobj.setId(dataSetId); // This is the rowID from the previous example.
-		
-		SaveResult[] results = connection.update(new SObject[] { sobj });
+		SaveResult[] results =saveAndRetry(connection, new SObject[] { sobj },UPDATE);
 		for(SaveResult sv:results) {
 		     if(sv.isSuccess()) {
 		         rowId = sv.getId();

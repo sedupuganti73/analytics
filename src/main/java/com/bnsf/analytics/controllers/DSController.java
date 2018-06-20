@@ -1,5 +1,7 @@
 package com.bnsf.analytics.controllers;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bnsf.analytics.model.DataSource;
 import com.bnsf.analytics.service.DataSourceService;
+import com.bnsf.analytics.utils.DBConnection;
 
 import groovy.util.logging.Log4j;
 
@@ -20,6 +23,9 @@ import groovy.util.logging.Log4j;
 public class DSController {
 	@Autowired
 	private DataSourceService dsService;
+	
+	@Autowired
+	private DBConnection connection;
 	
 	@RequestMapping( "/")
     public List<DataSource> getDataSources() {
@@ -37,8 +43,18 @@ public class DSController {
  	@RequestMapping( value = "/", method = RequestMethod.POST)
     public DataSource addReport(
     			@RequestBody DataSource dataSource
-    		) {
- 		dsService.addDataSource(dataSource);
+    		) throws Exception{
+ 		Connection  dbConnection = null;
+ 		 try {
+ 			dbConnection = connection.getConntection(dataSource.getUrl(), dataSource.getDbUsername(), dataSource.getDbPassword());
+			if (dbConnection == null) {
+				throw new Exception("Connection was not established. Please contact DB Administrator!!.");
+			}
+			dsService.addDataSource(dataSource);
+ 		 } finally {
+ 			connection.closeConnection(dbConnection);
+ 		 }
+ 		
  		return dataSource;
     }
  	
