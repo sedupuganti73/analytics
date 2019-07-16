@@ -18,6 +18,9 @@ import { DatabasesComponent } from './databases/databases.component';
 import { AddDatabaseComponent } from './add-database/add-database.component';
 import { TypePipe } from './report-columns/type.pipe';
 import { QueryPipe } from './reports/query.pipe';
+import { SfdcdatasourceComponent } from './sfdcdatasource/sfdcdatasource.component';
+import { AddSfdcdatasourceComponent } from './add-sfdcdatasource/add-sfdcdatasource.component';
+import { MatCheckboxModule } from '@angular/material';
 
 
 @NgModule({
@@ -30,6 +33,8 @@ import { QueryPipe } from './reports/query.pipe';
     AddColumnComponent,
     DatabasesComponent,
     AddDatabaseComponent,
+    SfdcdatasourceComponent,
+    AddSfdcdatasourceComponent,
     TypePipe,
     QueryPipe
   ],
@@ -53,9 +58,10 @@ import { QueryPipe } from './reports/query.pipe';
     MatSnackBarModule,
     MatSelectModule,
     MatProgressSpinnerModule,
-    HttpClientModule
+    HttpClientModule,
+    MatCheckboxModule
   ],
-  entryComponents: [AddReportComponent, AddColumnComponent, AddDatabaseComponent],
+  entryComponents: [AddReportComponent, AddColumnComponent, AddDatabaseComponent,AddSfdcdatasourceComponent],
   providers: [],
   bootstrap: [AppComponent]
 })

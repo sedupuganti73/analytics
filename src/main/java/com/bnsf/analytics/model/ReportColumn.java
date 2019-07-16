@@ -22,6 +22,9 @@ public class ReportColumn {
 	private int scale;
 	private int precision;
 	
+	@Column(name = "PRIMARY_KEY",  nullable = false, columnDefinition = "int default 0")
+	private int primaryKey;
+	
 	@Column(name = "REPORT_ID", nullable = false)
 	private long reportId;
 	
@@ -76,6 +79,18 @@ public class ReportColumn {
 		this.precision = precision;
 	}
 	
+	/**
+	 * @return the primaryKey
+	 */
+	public int getPrimaryKey() {
+		return primaryKey;
+	}
+	/**
+	 * @param primaryKey the primaryKey to set
+	 */
+	public void setPrimaryKey(int primaryKey) {
+		this.primaryKey = primaryKey;
+	}
 	@Override
 	public boolean equals(Object arg0) {
 		System.out.println("in equals");

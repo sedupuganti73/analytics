@@ -1,17 +1,22 @@
 package com.bnsf.analytics.utils;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.sql.Timestamp;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -30,6 +35,7 @@ import com.bnsf.analytics.model.Report;
 import com.bnsf.analytics.model.ReportColumn;
 import com.bnsf.analytics.model.ReportHistory;
 import com.bnsf.analytics.service.ReportHistoryService;
+import com.bnsf.analytics.service.ReportsService;
 import com.sforce.soap.partner.PartnerConnection;
 
 @Component
@@ -38,9 +44,19 @@ public class ReportData {
 	private static final String DELIMITER="|";
 	private static Pattern pattern = Pattern.compile("(\\d{2}):(\\d{2}):(\\d{2})");
 	private static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	private static final String DOUBLE_QUOTES ="\"";
+	private static final String OVERWRITE_OPERATION ="Overwrite";
+	private static final String APPEND_OPERATION ="Append";
+	private static final DateFormat incrementalDateFormat = new SimpleDateFormat("yyyy-MM-dd");
  
+	@Value("${spring.data.write-file}")
+	private  String writeFile;
+
 	@Autowired
 	private LoadToCloud loadToCloud;
+	
+	@Autowired
+	private ReportsService reportsService;
 	
 	@Autowired
 	private ReportHistoryService reportHistoryService;
@@ -56,6 +72,10 @@ public class ReportData {
 		try {
 			String query = report.getQuery();
 			preparedStmt =conn.prepareStatement(query); 
+			if (report.isIncremental()) {
+				Date runDate =  Calendar.getInstance().getTime();
+				preparedStmt.setDate(1, new java.sql.Date(runDate.getTime()));
+			}
 			preparedStmt.setQueryTimeout(600);
 		    result = preparedStmt.executeQuery();
 		    reportColumnList = getColumnDefintion(result.getMetaData(), report);
@@ -85,51 +105,90 @@ public class ReportData {
 		return reportColumnList;
 	}
 	
-	public void extractData (Connection conn , Report report,String folderPath, List<ReportColumn> reportColumnList) throws Exception {
-		logger.info("Start : ReportData.extractData");
+	public void extractData(Connection conn ,PartnerConnection partnerConnection, Report report,String folderPath, List<ReportColumn> reportColumnList) throws Exception {
+		logger.info("Start : ReportData.extractData"); 
 		ReportHistory reportHistory =recordReportStart(report,"Started");
-		System.out.println("reportHistory--------->"+ reportHistory);
+		StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+		for (StackTraceElement element : stackTraceElements) {
+			System.out.println("************************************************");
+			System.out.println("Class Name :: "+element.getClassName());
+			System.out.println("Method Name :: "+element.getMethodName());
+			System.out.println("************************************************");
+		}
 		PreparedStatement preparedStmt = null;
 		ResultSet result = null;
-		PartnerConnection partnerConnection = null;
 		String errorMessage = null;
 		
 		StringBuilder strBuilder = new StringBuilder();
-		partnerConnection = loadToCloud.getConnection();
-		String datasetId = loadToCloud.createDataSetDefintion(partnerConnection, report, reportColumnList);
 		int partNumber = 1;
 		long processedRecordCnt = 0l;
+		String data = null;
 		String headers = processHeaders(reportColumnList);
+		String operation = report.getMethod();
+		PrintWriter pw = null;
+		 
 		try {
-			if (report.getRecordCountQuery() != null && report.getRecordCountQuery().trim().length() > 0) {
+			if (report.isIncremental()) {
+				loadRunDateOnReport(report);
+			}
+			String datasetId = loadToCloud.createDataSetDefintion(partnerConnection, report, reportColumnList,operation);
+			if (report.getRecordCountQuery() != null && report.getRecordCountQuery().trim().length() > 0) {  
 				updateRecordCountBeforeRun(conn,report.getRecordCountQuery(),reportHistory);
 			}
 			preparedStmt =conn.prepareStatement(report.getQuery());
+			if (report.isIncremental()) {
+				Date runDate =  incrementalDateFormat.parse(report.getIncrementalValue());
+				preparedStmt.setDate(1, new java.sql.Date(runDate.getTime()));
+			}
 		    result = preparedStmt.executeQuery();
 		    strBuilder.append(headers);
-		    System.out.println("File Size::"+ fileSize);
+		    if (writeFile == null || "true".equalsIgnoreCase(writeFile)) {
+			    String reportFileName = report.getName()+".csv";
+				pw = new PrintWriter(new File(folderPath,reportFileName));
+				pw.write(headers);
+				pw.flush();
+		    }
 		    
 			while(result.next()) {
 				processedRecordCnt = processedRecordCnt + 1;
-				strBuilder.append(processResultSet(result,reportColumnList));
+				data =processResultSet(result,reportColumnList);
+				strBuilder.append(data);
+				if (writeFile == null || "true".equalsIgnoreCase(writeFile)) {
+				    pw.write(data);
+				}
+				
 			    if(strBuilder.length() > fileSize) {
-			    	System.out.println("strBuilder.length()--------->"+ strBuilder.length());
+			    	System.out.println("strBuilder.length()--------->"+ strBuilder.length() +"Part Number ::"+ partNumber);
 			    	loadToCloud.publishDataToWave(partnerConnection,strBuilder.toString().getBytes(),datasetId,partNumber);
+			    	if (partNumber == 4000) {
+			    		System.out.println("Part Number ::"+ partNumber);
+			    		if (OVERWRITE_OPERATION.equalsIgnoreCase(report.getMethod())) {
+			    			operation = APPEND_OPERATION;
+			    		} else {
+			    			operation = report.getMethod();
+			    		}
+					    loadToCloud.processData(datasetId,partnerConnection);
+					    datasetId = loadToCloud.createDataSetDefintion(partnerConnection, report, reportColumnList,operation);
+					    partNumber = 0;
+					}
 			    	partNumber++;
 			    	strBuilder = null;
 			    	strBuilder = new StringBuilder();
-			    	strBuilder.append(headers);
+			    	//strBuilder.append(headers);
 			    }
-			
 			}
 			if (strBuilder != null && strBuilder.length() > 0) {
-				System.out.println("strBuilder.length()--------->"+ strBuilder.length());
+				System.out.println("strBuilder.length()--------->"+ strBuilder.length() +"Part Number ::"+ partNumber);
 				loadToCloud.publishDataToWave(partnerConnection,strBuilder.toString().getBytes(),datasetId,partNumber);
 			}
 			loadToCloud.processData(datasetId,partnerConnection);
-		} catch (SQLException e) {
+			if (report.isIncremental()) {
+				reportsService.updateReport(report);
+			}
+		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("ReportData.extractData", e.getMessage());
+			logger.error("ReportData.extractData", e.getStackTrace());
 			errorMessage = e.getMessage();
 			
 		} finally {
@@ -149,10 +208,30 @@ public class ReportData {
 				}
 				preparedStmt = null;
 			}
+			if (pw != null && (writeFile == null || "true".equalsIgnoreCase(writeFile))) {
+				pw.flush();
+				pw.close();
+			}
 			recordReportEnd(reportHistory,(errorMessage != null ) ? errorMessage:"Completed" ,processedRecordCnt);
 		}
 		logger.info("End : ReportData.extractData");
 		
+	}
+	
+	private void loadRunDateOnReport(Report report) throws ParseException {
+		Date reportParameterDt = null;
+		if(report.getIncrementalValue() == null) {
+			reportParameterDt = Calendar.getInstance().getTime();
+		} else {
+			reportParameterDt = incrementalDateFormat.parse(report.getIncrementalValue());  
+			if (!reportParameterDt.equals(Calendar.getInstance().getTime())) {
+				Calendar c = Calendar.getInstance();
+		        c.setTime(reportParameterDt);
+		        c.add(Calendar.DATE, 1);
+		        reportParameterDt = c.getTime();
+			}
+		}
+		report.setIncrementalValue(incrementalDateFormat.format(reportParameterDt));
 	}
 	
 	private void updateRecordCountBeforeRun(Connection conn,String recordCntQuery,ReportHistory reportHistory ) {
@@ -243,8 +322,9 @@ public class ReportData {
 		logger.info("Start : ReportData.recordReportStart");
 		ReportHistory reportHistory = new ReportHistory();
 		reportHistory.setReportId(report.getReportId());
-		reportHistory.setStartDate(LocalDateTime.now());
-		reportHistory.setEndDate(LocalDateTime.now());
+		//reportHistory.setStartDate(LocalDateTime.now());
+		reportHistory.setStartDate(new Timestamp((new Date()).getTime()));
+		reportHistory.setEndDate(new Timestamp((new Date()).getTime()));
 		reportHistory.setMessage("Started");
 		try {
 			reportHistory =reportHistoryService.saveReportHistory(reportHistory);
@@ -270,7 +350,7 @@ public class ReportData {
 	}
 	private void recordReportEnd(ReportHistory reportHistory, String message, long processedRecordCnt) {
 		logger.info("Start : ReportData.recordReportEnd");
-		reportHistory.setEndDate(LocalDateTime.now());
+		reportHistory.setEndDate(new Timestamp(System.currentTimeMillis()));
 		reportHistory.setMessage(message);
 		reportHistory.setRecordCountAfter(processedRecordCnt);
 		try {
@@ -310,32 +390,43 @@ public class ReportData {
 				throw new Exception("Column data is missing");
 			}
 			if ('S' == column.getType()) {
+				databuilder.append(DOUBLE_QUOTES);
 			    databuilder.append(result.getString(columnName));
+			    databuilder.append(DOUBLE_QUOTES);
 			    databuilder.append(DELIMITER);
 		    } else if ('D' == column.getType()) {
 		    	 Date columnDate =  result.getDate(columnName);
+		    	 databuilder.append(DOUBLE_QUOTES);
 		    	 if (columnDate != null) {
 		    	     databuilder.append(result.getDate(columnName));
 		    	 }
+		    	 databuilder.append(DOUBLE_QUOTES);
 		    	 databuilder.append(DELIMITER);
-		    	 
 		    } else if ('I' == column.getType()) {
+		    	databuilder.append(DOUBLE_QUOTES);
 		    	databuilder.append(result.getInt(columnName));
+		    	databuilder.append(DOUBLE_QUOTES);
 		    	databuilder.append(DELIMITER);
 		    } else if ('F' == column.getType()) {
-		    	databuilder.append(result.getDouble(columnName));
+		    	databuilder.append(DOUBLE_QUOTES);
+		    	    databuilder.append(result.getDouble(columnName));
+		    	databuilder.append(DOUBLE_QUOTES);
 		    	databuilder.append(DELIMITER);
 		    } else if ('T' == column.getType()) {
 		    	//dataTime =result.getTime(columnName);
+		    	databuilder.append(DOUBLE_QUOTES);
 		    	if (result.getTime(columnName) != null) {
 		    		
 		    		databuilder.append(dateParseRegExp(result.getTime(columnName).toString()));
 		    	}
+		    	databuilder.append(DOUBLE_QUOTES);
 		    	databuilder.append(DELIMITER);
 		    } else if ('A' == column.getType()) {
+		    	databuilder.append(DOUBLE_QUOTES);
 		    	if (result.getTimestamp(columnName) != null) {
 		    		databuilder.append(dateFormat.format(result.getTimestamp(columnName)));
 		    	}
+		    	databuilder.append(DOUBLE_QUOTES);
 		    	databuilder.append(DELIMITER);		    	
 		    	
 		    }
@@ -344,7 +435,7 @@ public class ReportData {
 	    if (databuilder.length() > 2) {
 	    	databuilder.deleteCharAt(databuilder.lastIndexOf(DELIMITER));
 	    }
-	    databuilder.append('\n');
+	    databuilder.append("\n");
 	    logger.info("End : ReportData.processResultSet");
 		return databuilder.toString();
 	}
@@ -362,8 +453,9 @@ public class ReportData {
 			column.setReportId(report.getReportId());
 			column.setName(rsmd.getColumnName(i));
 			column.setLabel(rsmd.getColumnName(i));
+			System.out.println("Column Data :::" + column.getName() + "Column Type ::" + columnType);
 			
-			if ("Char".equalsIgnoreCase(columnType) || "Varchar".equalsIgnoreCase(columnType)) {
+			if ("Char".equalsIgnoreCase(columnType) || "Varchar".equalsIgnoreCase(columnType) || "nVarchar".equalsIgnoreCase(columnType) || "Time".equalsIgnoreCase(columnType)) {
 				column.setType('S');
 		    } else if ("Date".equalsIgnoreCase(columnType)) {
 		    	column.setType('D');
@@ -371,7 +463,10 @@ public class ReportData {
 		    } else if ("TimeStamp".equalsIgnoreCase(columnType) || "datetime".equalsIgnoreCase(columnType)) {
 		    	column.setType('A');
 		    	column.setFormat("yyyy-MM-dd HH:mm:ss");
-		    } else if ("Integer".equalsIgnoreCase(columnType) || "SMALLINT".equalsIgnoreCase(columnType) || "INT".equalsIgnoreCase(columnType) || "BIGINT".equalsIgnoreCase(columnType)) {
+		    /*} else if ("Time".equalsIgnoreCase(columnType)) {
+		    	column.setType('A');
+		    	column.setFormat("HH:mm:ss");*/
+		    } else if ("Integer".equalsIgnoreCase(columnType) || "SMALLINT".equalsIgnoreCase(columnType) || "INT".equalsIgnoreCase(columnType) || "BIGINT".equalsIgnoreCase(columnType) || "BYTEINT".equalsIgnoreCase(columnType)) {
 		    	column.setType('I');
 		    	column.setScale(rsmd.getScale(i));
 	    		if (rsmd.getPrecision(i) > 18) {
@@ -379,7 +474,7 @@ public class ReportData {
 	    		} else {
 	    			column.setPrecision(rsmd.getPrecision(i));
 	    		}
-		    } else if ("Decimal".equalsIgnoreCase(columnType)) {
+		    } else if ("Decimal".equalsIgnoreCase(columnType) || "Float".equalsIgnoreCase(columnType)) {
 		    	column.setType('F');
 		    	column.setScale(rsmd.getScale(i));
 		    	column.setPrecision(rsmd.getPrecision(i));

@@ -1,10 +1,10 @@
 
 <div class="page-container">
-    <button mat-fab (click)="addDatabase()" color="primary"  matTooltip="Add Database" style="position:fixed;top:95px;right:95px">
+    <button mat-fab (click)="addDatabase()" color="primary"  matTooltip="Add SFDC Connection" style="position:fixed;top:95px;right:95px">
         <mat-icon >add</mat-icon>
       </button>
   
-      <h3 class="page-title">Registered Databases</h3>
+      <h3 class="page-title">Registered SFDC Connections</h3>
 
 
 
@@ -39,12 +39,12 @@
           <mat-cell *matCellDef="let element"> {{element.url}} </mat-cell>
         </ng-container>
 
-        <ng-container matColumnDef="dbUsername">
+        <ng-container matColumnDef="username">
           <mat-header-cell *matHeaderCellDef> USERNAME </mat-header-cell>
-          <mat-cell *matCellDef="let element"> {{element.dbUsername}} </mat-cell>
+          <mat-cell *matCellDef="let element"> {{element.username}} </mat-cell>
         </ng-container>
 
-        <ng-container matColumnDef="dbPassword">
+        <ng-container matColumnDef="password">
           <mat-header-cell *matHeaderCellDef> PASSWORD </mat-header-cell>
           <mat-cell *matCellDef="let element"> *********** </mat-cell>
         </ng-container>

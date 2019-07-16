@@ -58,7 +58,7 @@ public class LoadToCloud {
 		return utility.getConnection();
 	}
 	
-	
+	/*
 	public void processLoad(String reportFolderPath, List<ReportColumn> reportColumnList, Report report) throws Exception {
 		logger.info("Start : LoadToCloud.processLoad");
 		PartnerConnection connection = utility.getConnection();
@@ -69,26 +69,31 @@ public class LoadToCloud {
 		processData(dataSetId,connection);
 		logger.info("End : LoadToCloud.processLoad");
 	}
+	*/
 	
-	public String createDataSetDefintion(PartnerConnection connection, Report report,List<ReportColumn> reportColumnList) throws Exception {
+	public String createDataSetDefintion(PartnerConnection connection, Report report,List<ReportColumn> reportColumnList, String operation) throws Exception {
 		logger.info("Start : LoadToCloud.createDataSetDefintion");
 		String metaDataJson = generateMetaDatatoLoad(report,reportColumnList);
-		String dataSetId = createWaveDataSet(connection,metaDataJson,report);
+		String dataSetId = createWaveDataSet(connection,metaDataJson,report,operation);
 		logger.info("End : LoadToCloud.createDataSetDefintion");
 		return dataSetId;
 	}
 	
 	
-	private String createWaveDataSet(PartnerConnection connection,String metaDataJson, Report report ) throws Exception {
+	private String createWaveDataSet(PartnerConnection connection,String metaDataJson, Report report , String operation) throws Exception {
 		logger.info("Start : LoadToCloud.createWaveDataSet");
 		String dataSetId = null;
 		SObject sobj = new SObject();
         sobj.setType("InsightsExternalData");
         sobj.setField("Format","Csv");
-        sobj.setField("EdgemartContainer", "SharedApp");
+        if (report.getAppName() != null ) {
+            sobj.setField("EdgemartContainer", report.getAppName());
+        } else {
+        	 sobj.setField("EdgemartContainer", "SharedApp");
+        }
         sobj.setField("EdgemartAlias", report.getName());
         sobj.setField("MetadataJson",metaDataJson.getBytes());
-        sobj.setField("Operation","Overwrite");
+        sobj.setField("Operation",operation);
         sobj.setField("Action","None");
         SaveResult[] results = saveAndRetry(connection,new SObject[] { sobj });
         for(SaveResult sv:results) {
@@ -141,17 +146,22 @@ public class LoadToCloud {
 	private List<FieldData> getFieldData(List<ReportColumn> reportColumnList,String dataName) {
 		logger.info("Start : LoadToCloud.getFieldData");
 		List<FieldData> fieldList = new ArrayList<FieldData>();
+		boolean isUnique = false;
 		for (ReportColumn reportColumn : reportColumnList) {
+			isUnique = false;
+			if (reportColumn.getPrimaryKey() == 1) {
+				isUnique = true;
+			}
 			if ('S' == reportColumn.getType()) {
-				fieldList.add(new FieldData(reportColumn.getName(), reportColumn.getLabel(), dataName, "Text"));
+				fieldList.add(new FieldData(reportColumn.getName(), reportColumn.getLabel(), dataName, "Text",isUnique));
 			} else if ('D' == reportColumn.getType() || 'A' == reportColumn.getType()) {
-				fieldList.add(new FieldData(reportColumn.getName(), reportColumn.getLabel(), dataName, "Date", reportColumn.getFormat(), 0));
+				fieldList.add(new FieldData(reportColumn.getName(), reportColumn.getLabel(), dataName, "Date", reportColumn.getFormat(), 0,isUnique));
 			} else if ('I' == reportColumn.getType()) {
-				fieldList.add(new FieldData(reportColumn.getName(), reportColumn.getLabel(), dataName, "Numeric", reportColumn.getFormat(), "0",reportColumn.getPrecision(), reportColumn.getScale()));
+				fieldList.add(new FieldData(reportColumn.getName(), reportColumn.getLabel(), dataName, "Numeric", reportColumn.getFormat(), "0",reportColumn.getPrecision(), reportColumn.getScale(),isUnique));
 			} else if ('F' == reportColumn.getType()) {
-				fieldList.add(new FieldData(reportColumn.getName(), reportColumn.getLabel(), dataName, "Numeric", reportColumn.getFormat(), "0",reportColumn.getPrecision(), reportColumn.getScale()));
+				fieldList.add(new FieldData(reportColumn.getName(), reportColumn.getLabel(), dataName, "Numeric", reportColumn.getFormat(), "0",reportColumn.getPrecision(), reportColumn.getScale(),isUnique));
 			} else if ('T' == reportColumn.getType()) {
-				fieldList.add(new FieldData(reportColumn.getName(), reportColumn.getLabel(), dataName, "Numeric", reportColumn.getFormat(), "0",reportColumn.getPrecision(), reportColumn.getScale()));
+				fieldList.add(new FieldData(reportColumn.getName(), reportColumn.getLabel(), dataName, "Numeric", reportColumn.getFormat(), "0",reportColumn.getPrecision(), reportColumn.getScale(),isUnique));
 			}
 		}
 		logger.info("End : LoadToCloud.getFieldData");
@@ -239,17 +249,29 @@ public class LoadToCloud {
         	connection = utility.getConnection();
         }*/
 		String rowId= null;
-		SObject sobj = new SObject();
-        sobj.setType("InsightsExternalDataPart"); 
-        sobj.setField("DataFile",byteArray);
-        sobj.setField("InsightsExternalDataId", parentId);
-        sobj.setField("PartNumber",partNumber); //Part numbers should start at 1
-        SaveResult[] results = saveAndRetry(connection,(new SObject[] { sobj }));
-        for(SaveResult sv:results) {
-            if(sv.isSuccess()) {
-           	    rowId = sv.getId();
-            }
-        }
+		try {
+			
+			SObject sobj = new SObject();
+	        sobj.setType("InsightsExternalDataPart"); 
+	        sobj.setField("DataFile",byteArray);
+	        sobj.setField("InsightsExternalDataId", parentId);
+	        sobj.setField("PartNumber",partNumber); //Part numbers should start at 1
+	        SaveResult[] results = saveAndRetry(connection,(new SObject[] { sobj }));
+	        for(SaveResult sv:results) {
+	            if(sv.isSuccess()) {
+	           	    rowId = sv.getId();
+	            } else {
+	            	logger.error("LoadToCloud.publishDataToWave", sv.getErrors()[0].getFields());
+	        	    System.out.println("Error::"+sv.getErrors()[0].getFields());
+	        	    String[] errorArray = sv.getErrors()[0].getFields();
+	        	    System.out.println("**************** "+ sv.getErrors()[0] +"*******************");
+	            }
+	        }
+		} catch (Exception ex) {
+			logger.error("LoadToCloud.publishDataToWave", ex.getMessage());
+			logger.error("LoadToCloud.publishDataToWave", ex.getStackTrace());
+			throw new Exception(ex.getMessage());
+		}
         logger.info("End : LoadToCloud.publishDataToWave");
         return rowId;
 	}

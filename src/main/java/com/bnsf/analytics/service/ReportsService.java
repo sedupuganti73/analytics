@@ -45,14 +45,32 @@ public class ReportsService {
 		return reportRepository.findOne(reportId);
 	}
 	
+	public List<Report> getReports(Integer runTime)  {
+		return reportRepository.findReportsToRun(runTime);
+	}
+	
+	public void updateReport(Report report) throws DuplicateColumnException {
+		reportRepository.save(report);
+	}
+	
 	
 	public void addReport(Report report) throws DuplicateColumnException {
 		logger.info("Start : ReportService.addReport");
-		
+		Report currentReport = null;
 		try {
-			report = reportRepository.save(report);
-			Set<ReportColumn> columns = dataService.getColumns(report);
-			columns.forEach((column)->columnRepository.save(column));
+			if (report.getReportId() != 0L) {
+				currentReport = getReport(report.getReportId());
+				report = reportRepository.save(report);
+				if (!currentReport.getQuery().equalsIgnoreCase(report.getQuery())) {
+					columnRepository.deleteByReportId(report.getReportId());
+					Set<ReportColumn> columns = dataService.getColumns(report);
+					columns.forEach((column)->columnRepository.save(column));
+				}
+			} else  {
+				report = reportRepository.save(report);
+				Set<ReportColumn> columns = dataService.getColumns(report);
+				columns.forEach((column)->columnRepository.save(column));
+			}
 			
 		} catch(SQLException se) {
 			logger.error("ReportService.addReport", se.getMessage());

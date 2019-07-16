@@ -14,8 +14,10 @@ export class AddColumnComponent  implements OnInit {
   public label = '';
   public type = '';
   public format = '';
+  public primaryKey ='';
   public columnTypes = [{value: 'S', viewValue: 'String'}, {value: 'D', viewValue: 'Date'}
   , {value: 'I', viewValue: 'Integer'} , {value: 'F', viewValue: 'Decimal'}];
+  public primaryKeyType = ['No','Yes'];
 
   constructor(public dialogRef: MatDialogRef<AddColumnComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any, private analyticsService: AnalyticsService) { }
@@ -29,6 +31,11 @@ export class AddColumnComponent  implements OnInit {
                this.label = data.label;
                this.type = data.type;
                this.format = data.format;
+               if (data.primaryKey == 1) {
+                   this.primaryKey ='Yes';
+               } else {
+                  this.primaryKey ='No';
+               }
         });
 
       }
@@ -39,16 +46,24 @@ export class AddColumnComponent  implements OnInit {
   }
 
   addColumn(): void {
+      var primarydataKey = 0;
+      if (this.primaryKey == 'Yes') {
+          primarydataKey = 1;
+      } 
       this.analyticsService.
-          addReportColumn(this.name , +this.data.reportId, this.label, this.type, this.format )
+          addReportColumn(this.name , +this.data.reportId, this.label, this.type, this.format, primarydataKey )
             .subscribe(data => {
             this.dialogRef.close(true);
           });
   }
 
   editColumn(): void {
+      var primarydataKey = 0;
+      if (this.primaryKey == 'Yes') {
+          primarydataKey = 1;
+      } 
     this.analyticsService.
-        updateReportColumn(+this.columnId, this.name , +this.data.reportId, this.label, this.type, this.format )
+        updateReportColumn(+this.columnId, this.name , +this.data.reportId, this.label, this.type, this.format,primarydataKey)
           .subscribe(data => {
           this.dialogRef.close(true);
         });

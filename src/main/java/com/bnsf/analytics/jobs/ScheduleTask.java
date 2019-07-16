@@ -37,17 +37,13 @@ public class ScheduleTask {
 		Calendar rightNow = Calendar.getInstance();
 		int hour = rightNow.get(Calendar.HOUR_OF_DAY);
 		System.out.println("Current Hour :::::"+ hour);
-		List<Report> reportList =reportsService.getReports();
-		if (reportList != null && reportList.size() > 0) {
-			for (Report report : reportList) {
-                if (report.getLoadType() == 1 && report.getRunTime() == hour) {
-                	loadService.loadData(report);
-				} else if (report.getLoadType() == 2) {
-					loadService.loadData(report);
-				}
-			}
-		}
+		List<Report> reportList =reportsService.getReports(hour);
 		
+		for (Report report : reportList) {
+			System.out.println("report::::"+ report.getName());
+			System.out.println("report::::"+ report.getLoadType() + " Run Time ::"+ report.getRunTime());
+			loadService.loadData(report);
+		}
 	}
 
 }

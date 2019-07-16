@@ -32,4 +32,10 @@ public class ColumnsService {
 	public void deleteColumn (Long columnId) {
 		columnRepository.delete(columnId);
 	}
+	
+	public void deleteAllColumns(long reportId) {
+		columnRepository.deleteByReportId(reportId);		
+	}
+	
+	
 }

@@ -20,6 +20,9 @@ public class FieldData {
 	@JsonProperty("isMultiValue")
 	private Boolean isMultiValue;
 	*/
+	
+	@JsonProperty("isUniqueId")
+	private Boolean isUniqueId ;
 	private String type = null;
 	private String defaultValue;
 	@JsonInclude(JsonInclude.Include.NON_NULL) 
@@ -31,30 +34,30 @@ public class FieldData {
 	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private Integer fiscalMonthOffset = null;
 	
-	public FieldData(String name , String label, String objectName, String type) {
+	public FieldData(String name , String label, String objectName, String type, Boolean isUniqueId) {
 		this.name = name;
 		this.fullyQualifiedName = objectName+'.'+ name;
 		this.label = label;
 		//this.isSystemField = Boolean.FALSE;
-		//this.isUniqueId = Boolean.FALSE;
+		this.isUniqueId = isUniqueId;
 		//this.isMultiValue = Boolean.FALSE;
 		this.type = type;
 		this.description =null;
 	}
 	
-	public FieldData(String name , String label, String objectName, String type,String format, Integer fiscalMonthOffset) {
+	public FieldData(String name , String label, String objectName, String type,String format, Integer fiscalMonthOffset, Boolean isUniqueId) {
 		this.name = name;
 		this.fullyQualifiedName = objectName+'.'+ name;
 		this.label = label;
 		//this.isSystemField = Boolean.FALSE;
-		//this.isUniqueId = Boolean.FALSE;
+		this.isUniqueId = isUniqueId;
 		this.type = type;
 		this.format = format;
 		this.fiscalMonthOffset = fiscalMonthOffset;
 		this.description =null;
 	}
 	
-	public FieldData(String name , String label, String objectName, String type,String format, String defaultValue,Integer precision,Integer scale) {
+	public FieldData(String name , String label, String objectName, String type,String format, String defaultValue,Integer precision,Integer scale, Boolean isUniqueId) {
 		this.name = name;
 		this.fullyQualifiedName = objectName+'.'+ name;
 		this.label = label;
@@ -65,6 +68,7 @@ public class FieldData {
 		this.precision = precision;
 		this.scale = scale;
 		this.description =null;
+		this.isUniqueId = isUniqueId;
 	}
 	
 	/**
@@ -134,19 +138,19 @@ public class FieldData {
 	/**
 	 * @return the isUniqueId
 	 */
-	/*
+	
 	@JsonProperty("isUniqueId")
 	public Boolean isUniqueId() {
 		return isUniqueId;
-	}*/
+	}
 	/**
 	 * @param isUniqueId the isUniqueId to set
 	 */
-	/*
+	
 	@JsonProperty("isUniqueId")
 	public void setUniqueId(Boolean isUniqueId) {
 		this.isUniqueId = isUniqueId;
-	}*/
+	}
 	/**
 	 * @return the isMultiValue
 	 */

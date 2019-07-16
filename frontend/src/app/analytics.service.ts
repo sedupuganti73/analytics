@@ -14,15 +14,15 @@ export class AnalyticsService {
     return this.http.get(this.prefix + '/reports/' + reportId);
   }
 
-  addReport( name: string, query: string, dataSource: number, createdBy: string, loadType: string, priority: string ,runTime: string ,recordCountQuery: string  ): Observable<any> {
+  addReport( name: string, query: string, dataSource: number,sfdcDataSource: number, createdBy: string, loadType: string,methodType: string, priority: string ,runTime: string ,recordCountQuery: string ,isIncremental: boolean,appName: string  ): Observable<any> {
     return this.http.post(this.prefix + '/reports/',
-    { name: name,  query: query , label: '', dataSource: dataSource, createdBy: createdBy, type: loadType, priority: priority, runTime: runTime, recordCountQuery: recordCountQuery});
+    { name: name,  query: query , label: '', dataSource: dataSource,sfdcDataSource: sfdcDataSource, createdBy: createdBy, type: loadType,methodType: methodType,priority: priority, runTime: runTime, recordCountQuery: recordCountQuery, isIncremental: isIncremental, appName: appName});
   }
 
-  updateReport( reportId: number, name: string, query: string, dataSource: number, createdBy: string, loadType: string, priority: string ,runTime: string ,recordCountQuery: string  ): Observable<any> {
+  updateReport( reportId: number, name: string, query: string, dataSource: number,sfdcDataSource: number, createdBy: string, loadType: string,methodType: string, priority: string ,runTime: string ,recordCountQuery: string ,isIncremental: boolean,appName: string ): Observable<any> {
     return this.http.post(
       this.prefix + '/reports/',
-      {reportId: reportId, name: name,  query: query , label: '', dataSource: dataSource, createdBy: createdBy, type: loadType, priority: priority, runTime: runTime, recordCountQuery: recordCountQuery});
+      {reportId: reportId, name: name,  query: query , label: '', dataSource: dataSource,sfdcDataSource: sfdcDataSource, createdBy: createdBy, type: loadType,methodType: methodType, priority: priority, runTime: runTime, recordCountQuery: recordCountQuery, isIncremental: isIncremental, appName: appName});
   }
 
   deleteReport ( reportId: number): Observable<any> {
@@ -38,14 +38,14 @@ export class AnalyticsService {
     return this.http.get(this.prefix + '/history/' + reportId);
   }
 
-  addReportColumn( name: string, reportId: number, label: string, type: string, format: string ): Observable<any> {
-    return this.http.post(this.prefix + '/columns/create', { name: name, reportId: reportId, label: label, type: type, format: format});
+  addReportColumn( name: string, reportId: number, label: string, type: string, format: string, primaryKey: number ): Observable<any> {
+    return this.http.post(this.prefix + '/columns/create', { name: name, reportId: reportId, label: label, type: type, format: format, primaryKey: primaryKey});
   }
 
-  updateReportColumn( columnId: number, name: string, reportId: number, label: string, type: string, format: string ): Observable<any> {
+  updateReportColumn( columnId: number, name: string, reportId: number, label: string, type: string, format: string, primaryKey: number ): Observable<any> {
     return this.http.post(this.prefix +
       '/columns/create',
-      { columnId: columnId, name: name, reportId: reportId, label: label, type: type, format: format});
+      { columnId: columnId, name: name, reportId: reportId, label: label, type: type, format: format, primaryKey: primaryKey});
   }
 
   deleteReportColumn ( columnId: number, reportId: number): Observable<any> {
@@ -72,5 +72,23 @@ export class AnalyticsService {
   runReport( reportId: number ): Observable<any> {
     return this.http.get(this.prefix + '/load/' + reportId);
   }
+  
+  getForceDatabases(): Observable<any> {
+    return this.http.get(this.prefix + '/forceDs/');
+  }
+  getForceDatabase(dsId: number): Observable<any> {
+    return this.http.get(this.prefix + '/forceDs/' + dsId);
+  }
+  addForceDatabase( name: string, description: string, url: string, username: string, password: string ): Observable<any> {
+    return this.http.post(this.prefix + '/forceDs/',
+    {name: name, description: description, url: url, username: username, password: password});
+  }
+  updateForceDatabase( dsId: number, name: string, description: string, url: string, username: string, password: string ): Observable<any> {
+    return this.http.post(this.prefix + '/forceDs/',
+    { dsId: dsId, name: name, description: description, url: url, username: username, password: password});
+  }
+  deleteForceDatabase ( dsId: number): Observable<any> {
+    return this.http.delete(this.prefix + '/forceDs/' + dsId);
+  }  
 
 }

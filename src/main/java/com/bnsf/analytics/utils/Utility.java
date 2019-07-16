@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import com.bnsf.analytics.model.SFDCDataSource;
 import com.sforce.soap.partner.GetUserInfoResult;
 import com.sforce.soap.partner.PartnerConnection;
 import com.sforce.ws.ConnectionException;
@@ -26,7 +27,20 @@ public class Utility {
 	@Value("${spring.SFDC.password}")	
     private String password;
 	
+	
+	public PartnerConnection getConnection(SFDCDataSource dataSource) {
+		this.sfdcUrl = dataSource.getUrl();
+		this.userName = dataSource.getUsername();
+		this.password = dataSource.getPassword();
+		
+		return getConnection(dataSource.getUrl(),dataSource.getUsername(),dataSource.getPassword());
+	}
+	
 	public PartnerConnection  getConnection()  {
+		return  getConnection(this.sfdcUrl,this.userName,this.password); 
+	}
+	
+	private PartnerConnection getConnection(String url, String userName, String password) {
 		logger.info("Start : Utility.getConntection", sfdcUrl, userName); 
 		PartnerConnection  connection = null;
 		try {
@@ -43,6 +57,7 @@ public class Utility {
 			System.out.println("sfdcUrl==========>"+ sfdcUrl);
 			System.out.println("userName==========>"+ userName);
 			System.out.println("password==========>"+ password);
+			ce.printStackTrace();
 			logger.error("Utility.getConntection", ce.getMessage());
 		}
 		logger.info("End : Utility.getConntection", sfdcUrl, userName);

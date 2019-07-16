@@ -1,4 +1,4 @@
-<div class="example-container">
+<div class="example-container" style="height:500px">
     <mat-progress-spinner *ngIf="loading==true"
         class="progress-spinner"
         color="primary"
@@ -33,7 +33,17 @@
 
                 </mat-form-field>
                 <br><br>
+                <mat-form-field color="accent"class="example-full-width" >
 
+                    <mat-select #dbType="ngModel" placeholder="Type"  [(ngModel)]="selectedForceDB" name="type" >
+                        <mat-option *ngFor="let type of forceDbTypes" [value]="type.dsId" >
+                          {{ type.name }}
+                        </mat-option>
+                      </mat-select>
+                      <mat-hint align="start"><strong >Force Type</strong> </mat-hint>
+
+                </mat-form-field>
+                <br><br>
               <mat-form-field class="example-full-width" color="accent"  >
                   <textarea rows="5" matInput placeholder="Query" [(ngModel)]="query" name="query" required></textarea>
                   <mat-hint align="start"><strong >Query to generate report</strong> </mat-hint>
@@ -46,6 +56,11 @@
 
               </mat-form-field>
               <br><br>
+             <mat-form-field class="example-full-width" color="accent">
+              <input matInput #reportName="ngModel" appCommandValidator placeholder="App Name" [(ngModel)]="appName" name="appName">
+              <mat-hint align="start"><strong>Einstein App Name</strong> </mat-hint>
+            </mat-form-field> 
+            <br><br>             
                <mat-form-field color="accent"class="example-full-width" >
 
                     <mat-select #dbType="ngModel" placeholder="Type"  [(ngModel)]="loadType" name="loadType" >
@@ -56,6 +71,20 @@
                       <mat-hint align="start"><strong >Load Type</strong> </mat-hint>
 
                 </mat-form-field>
+                <br><br>
+                  <mat-form-field color="accent"class="example-full-width" >
+
+                    <mat-select #dbType="ngModel" placeholder="methodType"  [(ngModel)]="methodType" name="methodType" >
+                        <mat-option *ngFor="let type of methodTypes" [value]="type" >
+                          {{ type }}
+                        </mat-option>
+                      </mat-select>
+                      <mat-hint align="start"><strong >Method Type</strong> </mat-hint>
+
+                </mat-form-field>
+                <br><br>
+                    <mat-checkbox  #dbType="ngModel" placeholder="isIncremental"  [(ngModel)]="isIncremental" name="isIncremental"></mat-checkbox>
+                      <mat-hint align="start"><strong >Is Incremental</strong> </mat-hint>
                 <br><br>
                 <mat-form-field color="accent" class="example-full-width">
                       <input matInput #creator="ngModel" placeholder="Run Priority" appUrlValidator  [(ngModel)]="priority" name="priority" required>

@@ -1,0 +1,73 @@
+<div class="example-container">
+    <h1 mat-dialog-title>Add Force Database</h1>
+    <form class="example-form" #form="ngForm" autocomplete="off">
+        
+            <mat-form-field class="example-full-width" color="accent">
+              <input matInput #columnName="ngModel" appCommandValidator placeholder="Database Name" [(ngModel)]="name" name="name" required>
+              <mat-hint align="start"><strong>Name of Database</strong> </mat-hint>
+              
+              <mat-error *ngIf="columnName.invalid && (columnName.dirty || columnName.touched) && columnName.errors.required">
+                    Name is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          
+            <br><br>
+  
+            <mat-form-field class="example-full-width" color="accent">
+              <input matInput #dbDescription="ngModel" appCommandValidator placeholder="Description" [(ngModel)]="description" name="description" required>
+              <mat-hint align="start"><strong>Description of Database</strong> </mat-hint>
+              
+              <mat-error *ngIf="dbDescription.invalid && (dbDescription.dirty || dbDescription.touched) && dbDescription.errors.required">
+                    Description is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          
+            <br><br>
+              
+            <mat-form-field class="example-full-width" color="accent">
+              
+                <input matInput #dbURL="ngModel" appCommandValidator placeholder="Connection URL" [(ngModel)]="url" name="url" required>
+                <mat-hint align="start"><strong>DB Connection URL</strong> </mat-hint>
+                
+              <mat-error *ngIf="dbURL.invalid && (dbURL.dirty || dbURL.touched) && dbURL.errors.required">
+                    Connection URL is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          
+            <br><br>
+                 
+            <mat-form-field class="example-full-width" color="accent">
+              
+                <input matInput #dbusername="ngModel" appCommandValidator placeholder="Username" [(ngModel)]="username" name="username" required>
+                <mat-hint align="start"><strong>username</strong> </mat-hint>
+                
+              <mat-error *ngIf="dbusername.invalid && (dbusername.dirty || dbusername.touched) && dbusername.errors.required">
+                   Username is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          
+            <br><br>
+
+            <mat-form-field class="example-full-width" color="accent">
+              
+                <input matInput #dbpassword="ngModel" appCommandValidator placeholder="Password" [(ngModel)]="password" name="password" type="password" required>
+                <mat-hint align="start"><strong>Password</strong> </mat-hint>
+                
+              <mat-error *ngIf="dbpassword.invalid && (dbpassword.dirty ||dbpassword.touched) && dbpassword.errors.required">
+                    Password is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          
+            <br><br>
+
+  
+              <button *ngIf="dsId!=null" mat-raised-button [disabled]="form.invalid" (click)="editDB()" color="primary">
+                  <mat-icon aria-label="Submit">create</mat-icon>&nbsp;Update Force Database
+              </button>  
+              <button *ngIf="dsId==null" mat-raised-button [disabled]="form.invalid" (click)="addDB()" color="primary">
+                  <mat-icon aria-label="Submit">add</mat-icon>&nbsp;Add Force Database
+              </button>  
+      </form>
+  
+     
+  </div>

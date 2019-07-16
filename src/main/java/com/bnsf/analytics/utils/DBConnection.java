@@ -51,6 +51,7 @@ public class DBConnection {
 			//DriverManager.setLoginTimeout(360000);
 		    connection = DriverManager.getConnection(url, userName, password);
 		} catch(Exception ex) {
+			ex.printStackTrace();
 			logger.error("DBConnection.getConntection", ex.getMessage());
 		}
 		logger.info("End : DBConnection.getConntection", url, userName);

@@ -1,23 +1,21 @@
 package com.bnsf.analytics.model;
 
-import java.sql.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.Type;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.bnsf.analytics.service.DataSourceService;
+import com.bnsf.analytics.service.ForceConnectionService;
 
 @Entity
 @Table(name="DATA_SET_DEFF", schema = "NP_CRM1")
@@ -26,6 +24,10 @@ public class Report {
 	@Transient
 	@Autowired
 	DataSourceService dsService;
+	
+	@Transient
+	@Autowired
+	ForceConnectionService forceConnectionService;
 	
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "REPORT_ID", nullable = false, unique = true)
@@ -54,6 +56,17 @@ public class Report {
 	@Column(name = "Priority", nullable = false, columnDefinition = "int default 0")
 	private int priority;
 	
+	@Column(name = "Method", nullable = true)
+	private String method;
+	
+	
+	@Column(name = "is_incremental", nullable = false,columnDefinition = "int default 0")
+	@Type(type = "org.hibernate.type.NumericBooleanType")
+	private boolean isIncremental;
+	
+	@Column(name = "incremental_value", nullable = true)
+	private String incrementalValue;
+	
 	
 	private String label;
 	
@@ -62,8 +75,17 @@ public class Report {
 	private DataSource dataSource;
 	
 	
+	@ManyToOne
+    @JoinColumn(columnDefinition="integer",name="SFDC_DATASOURCE_ID", referencedColumnName="DATASOURCE_ID")
+	private SFDCDataSource sfdcDataSource;
+	
+		
 	@Column(name = "CREATED_BY", nullable = false)
 	private String createdBy;
+	
+	
+	@Column(name = "AppName", nullable = true)
+	private String appName;
 	
 	
 	public long getReportId() {
@@ -154,5 +176,66 @@ public class Report {
 	public void setRecordCountQuery(String recordCountQuery) {
 		this.recordCountQuery = recordCountQuery;
 	}
-
+	/**
+	 * @return the method
+	 */
+	public String getMethod() {
+		return method;
+	}
+	/**
+	 * @param method the method to set
+	 */
+	public void setMethod(String method) {
+		this.method = method;
+	}
+	/**
+	 * @return the sfdcDataSource
+	 */
+	public SFDCDataSource getSfdcDataSource() {
+		return sfdcDataSource;
+	}
+	/**
+	 * @param sfdcDataSource the sfdcDataSource to set
+	 */
+	public void setSfdcDataSource(SFDCDataSource sfdcDataSource) {
+		this.sfdcDataSource = sfdcDataSource;
+	}
+	/**
+	 * @return the isIncremental
+	 */
+	public boolean isIncremental() {
+		return isIncremental;
+	}
+	/**
+	 * @param isIncremental the isIncremental to set
+	 */
+	public void setIncremental(boolean isIncremental) {
+		this.isIncremental = isIncremental;
+	}
+	/**
+	 * @return the incrementalValue
+	 */
+	public String getIncrementalValue() {
+		return incrementalValue;
+	}
+	/**
+	 * @param incrementalValue the incrementalValue to set
+	 */
+	public void setIncrementalValue(String incrementalValue) {
+		this.incrementalValue = incrementalValue;
+	}
+	/**
+	 * @return the appName
+	 */
+	public String getAppName() {
+		return appName;
+	}
+	/**
+	 * @param appName the appName to set
+	 */
+	public void setAppName(String appName) {
+		this.appName = appName;
+	}
+	
+	
 }

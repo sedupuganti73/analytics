@@ -35,10 +35,14 @@
       
        
         <ng-container matColumnDef="type">
-          <mat-header-cell *matHeaderCellDef> TYPE </mat-header-cell>
+          <mat-header-cell *matHeaderCellDef>DB TYPE </mat-header-cell>
           <mat-cell *matCellDef="let element"> {{element.dataSource.name}} </mat-cell>
         </ng-container>
-    
+
+        <ng-container matColumnDef="sfdctype">
+          <mat-header-cell *matHeaderCellDef>Force TYPE </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.sfdcDataSource.name}} </mat-cell>
+        </ng-container>    
         <ng-container matColumnDef="createdBy">
           <mat-header-cell *matHeaderCellDef> CREATED BY </mat-header-cell>
           <mat-cell *matCellDef="let element"> {{element.createdBy}} </mat-cell>

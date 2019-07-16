@@ -1,5 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatDialogTitle} from '@angular/material';
+import {MatCheckboxModule} from '@angular/material';
 import {AnalyticsService} from '../analytics.service';
 import { catchError } from 'rxjs/operators/catchError';
 
@@ -25,6 +26,12 @@ export class AddReportComponent  implements OnInit {
   public loadTypes = ['Once','Daily','Hourly'];
   public runTime='';
   public recordCountQuery ='';
+  public methodTypes = ['Overwrite','Append','Upsert'];
+  public methodType ='';
+  public forceDbTypes = [];
+  public selectedForceDB: number;
+  public isIncremental = false;
+  public appName ='';
   
 
   constructor(public dialogRef: MatDialogRef<AddReportComponent>,
@@ -33,6 +40,10 @@ export class AddReportComponent  implements OnInit {
         this.analyticsService.getDatabases().subscribe( data => {
             this.dbTypes = data;
             this.selectedDB = this.dbTypes[0].dsId;
+        });
+        this.analyticsService.getForceDatabases().subscribe( data => {
+            this.forceDbTypes = data;
+            this.selectedForceDB = this.forceDbTypes[0].dsId;
         });
      }
 
@@ -52,13 +63,18 @@ export class AddReportComponent  implements OnInit {
                     this.loadType = 'Once';
                  } else if (report.loadType == 1) {
                     this.loadType = 'Daily';
-                 } else if (report.loadType == 1) {
+                 } else if (report.loadType == 2) {
                      this.loadType = 'Hourly';
                  }
              }
+             if (report.method != null) {
+                 this.methodType = report.method ; 
+             }             
              this.priority = report.priority;
              this.runTime = report.runTime;
              this.recordCountQuery = report.recordCountQuery;
+             this.isIncremental = report.isIncremental;
+             this.appName = report.appName;
        });
 
     }
@@ -72,7 +88,7 @@ export class AddReportComponent  implements OnInit {
       this.loading = true;
       this.errorMessage = '';
       this.analyticsService.
-          addReport(this.name, this.query, this.selectedDB, this.createdBy,this.loadType,this.priority,this.runTime,this.recordCountQuery)
+          addReport(this.name, this.query, this.selectedDB,this.selectedForceDB, this.createdBy,this.loadType,this.methodType,this.priority,this.runTime,this.recordCountQuery,this.isIncremental, this.appName)
           .subscribe(data => {
             this.loading = false;
             this.dialogRef.close(true);
@@ -87,7 +103,8 @@ export class AddReportComponent  implements OnInit {
   }
 
   updateReport(): void {
-    this.analyticsService.updateReport( this.reportId, this.name, this.query, this.selectedDB, this.createdBy,this.loadType,this.priority,this.runTime,this.recordCountQuery)
+    alert('this.methodType:::'+ this.methodType);
+    this.analyticsService.updateReport( this.reportId, this.name, this.query, this.selectedDB,this.selectedForceDB, this.createdBy,this.loadType,this.methodType,this.priority,this.runTime,this.recordCountQuery,this.isIncremental,this.appName)
         .subscribe(data => {
           this.dialogRef.close(true);
         });

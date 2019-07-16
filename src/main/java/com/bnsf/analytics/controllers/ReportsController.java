@@ -4,7 +4,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bnsf.analytics.exceptions.DuplicateColumnException;
 import com.bnsf.analytics.model.Report;
 import com.bnsf.analytics.service.DataSourceService;
+import com.bnsf.analytics.service.ForceConnectionService;
 import com.bnsf.analytics.service.ReportsService;
 
 import groovy.util.logging.Log4j;
@@ -24,11 +24,16 @@ import groovy.util.logging.Log4j;
 @RequestMapping( "/api/reports")
 public class ReportsController {
 	
+	    private static final String SHARED_APP="SharedApp";
+	
 		@Autowired
 		private ReportsService reportsService;
 		
 		@Autowired
 		private DataSourceService dsService;
+		
+		@Autowired
+		private ForceConnectionService sfdcDataSourceService;
 	
 	 	@RequestMapping( "/")
 	    public List<Report> getReports() {
@@ -50,6 +55,7 @@ public class ReportsController {
 	 			report.setReportId(Long.parseLong( reportObj.get("reportId"))); 
 	 		}
 	 		report.setDataSource(dsService.getDataSource(Long.parseLong( reportObj.get("dataSource"))) );
+	 		report.setSfdcDataSource(sfdcDataSourceService.getDataSource(Long.parseLong( reportObj.get("sfdcDataSource"))));
 	 		report.setName(reportObj.get("name"));
 	 		report.setQuery(reportObj.get("query"));
 	 		report.setCreatedBy(reportObj.get("createdBy"));
@@ -63,6 +69,14 @@ public class ReportsController {
 	 				report.setLoadType(2);
 	 			}
 	 		}
+	 		
+	 		report.setMethod(reportObj.get("methodType"));
+	 		System.out.println("Query------->"+ report.getQuery());
+	 		System.out.println("Method ::::"+ report.getMethod());;
+	 		report.setIncremental(Boolean.parseBoolean(reportObj.get("isIncremental")));
+	 		if (!report.isIncremental()) {
+	 			report.setIncrementalValue(null);
+	 		}
 	 		if (reportObj.get("priority") != null) {
 	 			report.setPriority(Integer.parseInt(reportObj.get("priority")));
 	 		}
@@ -71,6 +85,11 @@ public class ReportsController {
 	 		}
 	 		if (reportObj.get("recordCountQuery") != null) {
 	 			report.setRecordCountQuery(reportObj.get("recordCountQuery"));
+	 		}
+	 		if (reportObj.get("appName") != null) {
+	 			report.setAppName(reportObj.get("appName"));
+	 		} else {
+	 			report.setAppName(SHARED_APP);
 	 		}
 	 		reportsService.addReport(report);
 	 		return report;

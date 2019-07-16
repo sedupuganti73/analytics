@@ -19,13 +19,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.bnsf.analytics.exceptions.DuplicateColumnException;
+import com.bnsf.analytics.model.DataSource;
 import com.bnsf.analytics.model.Report;
 import com.bnsf.analytics.model.ReportColumn;
+import com.bnsf.analytics.model.SFDCDataSource;
 import com.bnsf.analytics.utils.DBConnection;
-import com.bnsf.analytics.utils.LoadToCloud;
 import com.bnsf.analytics.utils.ReportData;
 import com.bnsf.analytics.utils.Utility;
-import com.bnsf.analytics.model.DataSource;
+import com.sforce.soap.partner.PartnerConnection;
 
 @Service
 public class DataLoadService {
@@ -34,6 +35,8 @@ public class DataLoadService {
 	private  String FOLDER_PATH;
 
 	
+	@Value("${spring.data.write-file}")
+	private  String writeFile;
 	
 	@Autowired
 	private DBConnection connection;
@@ -47,12 +50,10 @@ public class DataLoadService {
 	
 	@Autowired
 	private ReportData reportData;
-	@Autowired
-	private LoadToCloud loadData;
-	
 	
 	@Autowired
-	private Utility utils;
+	private Utility connectionUtility;
+	
 
 	
 	public Set<ReportColumn>  getColumns(Report report) throws ClassNotFoundException, SQLException, DuplicateColumnException  {
@@ -90,14 +91,18 @@ public class DataLoadService {
 		Connection  dbConnection = null;
 		String reportdfolderPath = null;
 		DateFormat df = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss"); 
+		PartnerConnection partnerConnection = null;
 		try {
 			DataSource datasource = report.getDataSource();
+			SFDCDataSource sfdcDataSource = report.getSfdcDataSource();
 			reportColumnList = columnsService.getColumns(report.getReportId());
 			logger.debug(report.getName() +"Start Time:: "+ df.format(Calendar.getInstance().getTime()));
-			
-			//reportdfolderPath =createReportFolder(report.getName(),FOLDER_PATH);
+			if (writeFile == null || "true".equalsIgnoreCase(writeFile)) {
+			    reportdfolderPath =createReportFolder(report.getName(),FOLDER_PATH);
+			}
 			dbConnection =connection.getConntection(datasource.getUrl(), datasource.getDbUsername(), datasource.getDbPassword());
-			reportData.extractData(dbConnection, report,reportdfolderPath,reportColumnList);
+			partnerConnection = connectionUtility.getConnection(sfdcDataSource);
+			reportData.extractData(dbConnection,partnerConnection, report,reportdfolderPath,reportColumnList);
 			//loadData.processLoad(reportdfolderPath, reportColumnList, report);
 			logger.debug(report.getName() +"End Time:: "+ df.format(Calendar.getInstance().getTime()));
 		} catch (Exception e) {
@@ -120,7 +125,7 @@ public class DataLoadService {
 	    } catch (IOException e) {
 	       e.printStackTrace();
 	    }
-	    logger.info("End : DataLoadService.isJSONValid");
+	    logger.info("End : DataLoadService.isJSONValid");  
 	    return isValid;
 	  }
 	
@@ -128,6 +133,7 @@ public class DataLoadService {
 	
 	private String createReportFolder(String reportName, String filePath) {
 		logger.info("Start : DataLoadService.createReportFolder");
+		String folderAbsolutePath =null;
 		Date today = Calendar.getInstance().getTime();
 		DateFormat df = new SimpleDateFormat("yyyyy-mm-dd");
 		StringBuilder reportFolderBuilder = new StringBuilder();
@@ -138,8 +144,10 @@ public class DataLoadService {
 		if (!reportFolder.exists()) {
 			reportFolder.mkdirs();
 		}
+		folderAbsolutePath = reportFolder.getAbsolutePath();
+		reportFolder = null;
 		logger.info("End : DataLoadService.createReportFolder");
-		return reportFolder.getAbsolutePath();
+		return folderAbsolutePath;
 	}
 
 }

@@ -49,6 +49,22 @@
           </mat-form-field>
         
           <br><br>
+          <mat-form-field class="example-full-width" color="accent">
+            
+            <mat-select #columnType="ngModel" placeholder="Primary Key"  [(ngModel)]="primaryKey" name="primaryKey">
+              <mat-option *ngFor="let type of primaryKeyType" [value]="type">
+                {{ type }}
+              </mat-option>
+            </mat-select>  
+            
+            <mat-hint align="start"><strong>Type of column</strong> </mat-hint>
+            
+            <mat-error *ngIf="columnType.invalid && (columnType.dirty || columnType.touched) && columnType.errors.required">
+                  Type is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        
+          <br><br>          
                
             <button *ngIf="columnId!=null" mat-raised-button [disabled]="form.invalid" (click)="editColumn()" color="primary">
               <mat-icon aria-label="Submit">create</mat-icon>&nbsp;Update Column
