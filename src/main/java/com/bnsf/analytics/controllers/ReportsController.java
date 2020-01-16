@@ -71,8 +71,6 @@ public class ReportsController {
 	 		}
 	 		
 	 		report.setMethod(reportObj.get("methodType"));
-	 		System.out.println("Query------->"+ report.getQuery());
-	 		System.out.println("Method ::::"+ report.getMethod());;
 	 		report.setIncremental(Boolean.parseBoolean(reportObj.get("isIncremental")));
 	 		if (!report.isIncremental()) {
 	 			report.setIncrementalValue(null);
@@ -90,6 +88,9 @@ public class ReportsController {
 	 			report.setAppName(reportObj.get("appName"));
 	 		} else {
 	 			report.setAppName(SHARED_APP);
+	 		}
+	 		if (reportObj.get("flowName") != null) {
+	 			report.setFlowName(reportObj.get("flowName"));
 	 		}
 	 		reportsService.addReport(report);
 	 		return report;

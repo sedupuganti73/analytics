@@ -3,6 +3,9 @@
  */
 package com.bnsf.analytics.model;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,9 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.hibernate.annotations.Type;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import com.bnsf.analytics.service.ReportsService;
 
@@ -25,7 +26,7 @@ import com.bnsf.analytics.service.ReportsService;
 @Entity
 @Table(name="REPORT_HISTORY", schema = "NP_CRM1")
 public class ReportHistory {
-	
+	private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 	
 	@Transient
 	@Autowired
@@ -40,15 +41,15 @@ public class ReportHistory {
 	@Column(name = "START_DATE", nullable = false)
 	//@Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	//@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-	//private LocalDateTime startDate;
-	private java.sql.Timestamp startDate;
+	private LocalDateTime startDate;
+	//private java.sql.Timestamp startDate;
 	
 	
 	@Column(name = "END_DATE", nullable = true)
 	//@Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	//@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-	//private LocalDateTime endDate;
-	private java.sql.Timestamp endDate;
+	private LocalDateTime endDate;
+	//private java.sql.Timestamp endDate;
 	
 	
 	@Column(name = "MESSAGE", nullable = false)
@@ -81,28 +82,28 @@ public class ReportHistory {
 	/**
 	 * @return the startDate
 	 */
-	public java.sql.Timestamp getStartDate() {
+	public LocalDateTime getStartDate() {
 		return startDate;
 	}
 
 	/**
 	 * @param startDate the startDate to set
 	 */
-	public void setStartDate(java.sql.Timestamp startDate) {
+	public void setStartDate(LocalDateTime startDate) {
 		this.startDate = startDate;
 	}
 
 	/**
 	 * @return the endDate
 	 */
-	public java.sql.Timestamp getEndDate() {
+	public LocalDateTime getEndDate() {
 		return endDate;
 	}
 
 	/**
 	 * @param endDate the endDate to set
 	 */
-	public void setEndDate(java.sql.Timestamp endDate) {
+	public void setEndDate(LocalDateTime endDate) {
 		this.endDate = endDate;
 	}
 
@@ -160,6 +161,18 @@ public class ReportHistory {
 	 */
 	public void setRecordCountAfter(long recordCountAfter) {
 		this.recordCountAfter = recordCountAfter;
+	}
+	
+	public String getStartDateStr() {
+		return this.startDate.format(formatter);
+	}
+	
+	public String getEndDateStr() {
+		String endDate ="";
+		if (this.endDate != null) {
+			endDate = this.endDate.format(formatter);
+		}
+		return endDate;
 	}
 	
 

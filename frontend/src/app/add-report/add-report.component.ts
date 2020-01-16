@@ -32,6 +32,7 @@ export class AddReportComponent  implements OnInit {
   public selectedForceDB: number;
   public isIncremental = false;
   public appName ='';
+  public flowName ='';
   
 
   constructor(public dialogRef: MatDialogRef<AddReportComponent>,
@@ -75,6 +76,7 @@ export class AddReportComponent  implements OnInit {
              this.recordCountQuery = report.recordCountQuery;
              this.isIncremental = report.isIncremental;
              this.appName = report.appName;
+             this.flowName = report.flowName;
        });
 
     }
@@ -88,7 +90,7 @@ export class AddReportComponent  implements OnInit {
       this.loading = true;
       this.errorMessage = '';
       this.analyticsService.
-          addReport(this.name, this.query, this.selectedDB,this.selectedForceDB, this.createdBy,this.loadType,this.methodType,this.priority,this.runTime,this.recordCountQuery,this.isIncremental, this.appName)
+          addReport(this.name, this.query, this.selectedDB,this.selectedForceDB, this.createdBy,this.loadType,this.methodType,this.priority,this.runTime,this.recordCountQuery,this.isIncremental, this.appName,this.flowName)
           .subscribe(data => {
             this.loading = false;
             this.dialogRef.close(true);
@@ -103,11 +105,12 @@ export class AddReportComponent  implements OnInit {
   }
 
   updateReport(): void {
-    alert('this.methodType:::'+ this.methodType);
-    this.analyticsService.updateReport( this.reportId, this.name, this.query, this.selectedDB,this.selectedForceDB, this.createdBy,this.loadType,this.methodType,this.priority,this.runTime,this.recordCountQuery,this.isIncremental,this.appName)
+    this.analyticsService.updateReport( this.reportId, this.name, this.query, this.selectedDB,this.selectedForceDB, this.createdBy,this.loadType,this.methodType,this.priority,this.runTime,this.recordCountQuery,this.isIncremental,this.appName,this.flowName)
         .subscribe(data => {
           this.dialogRef.close(true);
         });
   }
+  
+  
 
 }

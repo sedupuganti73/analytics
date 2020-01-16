@@ -14,15 +14,15 @@ export class AnalyticsService {
     return this.http.get(this.prefix + '/reports/' + reportId);
   }
 
-  addReport( name: string, query: string, dataSource: number,sfdcDataSource: number, createdBy: string, loadType: string,methodType: string, priority: string ,runTime: string ,recordCountQuery: string ,isIncremental: boolean,appName: string  ): Observable<any> {
+  addReport( name: string, query: string, dataSource: number,sfdcDataSource: number, createdBy: string, loadType: string,methodType: string, priority: string ,runTime: string ,recordCountQuery: string ,isIncremental: boolean,appName: string, flowName: string  ): Observable<any> {
     return this.http.post(this.prefix + '/reports/',
-    { name: name,  query: query , label: '', dataSource: dataSource,sfdcDataSource: sfdcDataSource, createdBy: createdBy, type: loadType,methodType: methodType,priority: priority, runTime: runTime, recordCountQuery: recordCountQuery, isIncremental: isIncremental, appName: appName});
+    { name: name,  query: query , label: '', dataSource: dataSource,sfdcDataSource: sfdcDataSource, createdBy: createdBy, type: loadType,methodType: methodType,priority: priority, runTime: runTime, recordCountQuery: recordCountQuery, isIncremental: isIncremental, appName: appName,flowName: flowName});
   }
 
-  updateReport( reportId: number, name: string, query: string, dataSource: number,sfdcDataSource: number, createdBy: string, loadType: string,methodType: string, priority: string ,runTime: string ,recordCountQuery: string ,isIncremental: boolean,appName: string ): Observable<any> {
+  updateReport( reportId: number, name: string, query: string, dataSource: number,sfdcDataSource: number, createdBy: string, loadType: string,methodType: string, priority: string ,runTime: string ,recordCountQuery: string ,isIncremental: boolean,appName: string, flowName: string ): Observable<any> {
     return this.http.post(
       this.prefix + '/reports/',
-      {reportId: reportId, name: name,  query: query , label: '', dataSource: dataSource,sfdcDataSource: sfdcDataSource, createdBy: createdBy, type: loadType,methodType: methodType, priority: priority, runTime: runTime, recordCountQuery: recordCountQuery, isIncremental: isIncremental, appName: appName});
+      {reportId: reportId, name: name,  query: query , label: '', dataSource: dataSource,sfdcDataSource: sfdcDataSource, createdBy: createdBy, type: loadType,methodType: methodType, priority: priority, runTime: runTime, recordCountQuery: recordCountQuery, isIncremental: isIncremental, appName: appName,flowName: flowName});
   }
 
   deleteReport ( reportId: number): Observable<any> {
@@ -34,18 +34,19 @@ export class AnalyticsService {
   getReportColumns(reportId: number): Observable<any> {
     return this.http.get(this.prefix + '/columns/' + reportId);
   }
-  getHistory(reportId: string): Observable<any> {
+  getHistory(reportId: number): Observable<any> {
     return this.http.get(this.prefix + '/history/' + reportId);
   }
-
-  addReportColumn( name: string, reportId: number, label: string, type: string, format: string, primaryKey: number ): Observable<any> {
-    return this.http.post(this.prefix + '/columns/create', { name: name, reportId: reportId, label: label, type: type, format: format, primaryKey: primaryKey});
+  
+  
+  addReportColumn( name: string, reportId: number, label: string, type: string, format: string, primaryKey: number,precision: number,scale: number ): Observable<any> {
+    return this.http.post(this.prefix + '/columns/create', { name: name, reportId: reportId, label: label, type: type, format: format, primaryKey: primaryKey,precision: precision,scale: scale});
   }
 
-  updateReportColumn( columnId: number, name: string, reportId: number, label: string, type: string, format: string, primaryKey: number ): Observable<any> {
+  updateReportColumn( columnId: number, name: string, reportId: number, label: string, type: string, format: string, primaryKey: number,precision: number,scale: number ): Observable<any> {
     return this.http.post(this.prefix +
       '/columns/create',
-      { columnId: columnId, name: name, reportId: reportId, label: label, type: type, format: format, primaryKey: primaryKey});
+      { columnId: columnId, name: name, reportId: reportId, label: label, type: type, format: format, primaryKey: primaryKey,precision: precision,scale: scale});
   }
 
   deleteReportColumn ( columnId: number, reportId: number): Observable<any> {

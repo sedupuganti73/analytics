@@ -13,4 +13,8 @@ public interface ReportRepository extends JpaRepository<Report, Long>{
 	List<Report> findReportsToRun(Integer runTime);
 	
 	
+	@Query("SELECT r FROM Report r WHERE r.name=?1  ORDER BY r.name ASC")
+	Report findReportByName(String name);
+	
+	
 }

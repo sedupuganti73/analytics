@@ -93,12 +93,7 @@ public class ReportColumn {
 	}
 	@Override
 	public boolean equals(Object arg0) {
-		System.out.println("in equals");
-		// TODO Auto-generated method stub
-		
 		ReportColumn other = (ReportColumn)arg0;
-		System.out.println("2nd arg "+other.name);
-		System.out.println("1st arg "+this.name);
 		return other.name.equals(this.name);
 	}
 	

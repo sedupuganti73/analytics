@@ -18,6 +18,8 @@ export class AddColumnComponent  implements OnInit {
   public columnTypes = [{value: 'S', viewValue: 'String'}, {value: 'D', viewValue: 'Date'}
   , {value: 'I', viewValue: 'Integer'} , {value: 'F', viewValue: 'Decimal'}];
   public primaryKeyType = ['No','Yes'];
+  public precision: number = null;
+  public scale: number = null;
 
   constructor(public dialogRef: MatDialogRef<AddColumnComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any, private analyticsService: AnalyticsService) { }
@@ -36,6 +38,8 @@ export class AddColumnComponent  implements OnInit {
                } else {
                   this.primaryKey ='No';
                }
+               this.precision = data.precision;
+               this.scale = data.scale;
         });
 
       }
@@ -51,7 +55,7 @@ export class AddColumnComponent  implements OnInit {
           primarydataKey = 1;
       } 
       this.analyticsService.
-          addReportColumn(this.name , +this.data.reportId, this.label, this.type, this.format, primarydataKey )
+          addReportColumn(this.name , +this.data.reportId, this.label, this.type, this.format, primarydataKey,this.precision,this.scale)
             .subscribe(data => {
             this.dialogRef.close(true);
           });
@@ -63,7 +67,7 @@ export class AddColumnComponent  implements OnInit {
           primarydataKey = 1;
       } 
     this.analyticsService.
-        updateReportColumn(+this.columnId, this.name , +this.data.reportId, this.label, this.type, this.format,primarydataKey)
+        updateReportColumn(+this.columnId, this.name , +this.data.reportId, this.label, this.type, this.format,primarydataKey,this.precision,this.scale)
           .subscribe(data => {
           this.dialogRef.close(true);
         });

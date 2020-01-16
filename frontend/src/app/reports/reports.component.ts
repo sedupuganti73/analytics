@@ -59,8 +59,8 @@ export class ReportsComponent implements OnInit {
         width: '500px'
       });
     }
-
-
+    
+ 
     dialogRef.afterClosed().subscribe(refreshValues => {
       console.log('The dialog was closed ' + refreshValues);
       if ( refreshValues) {

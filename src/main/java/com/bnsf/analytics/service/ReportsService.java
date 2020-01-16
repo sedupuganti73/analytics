@@ -41,6 +41,11 @@ public class ReportsService {
 		return reportRepository.findAll();
 	}
 	
+	
+	public Report getReport(String reportName)  {
+		return reportRepository.findReportByName(reportName);
+	}
+	
 	public Report getReport(Long reportId)  {
 		return reportRepository.findOne(reportId);
 	}

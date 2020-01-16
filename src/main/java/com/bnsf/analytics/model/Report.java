@@ -87,6 +87,9 @@ public class Report {
 	@Column(name = "AppName", nullable = true)
 	private String appName;
 	
+	@Column(name = "flow_name", nullable = true)
+	private String flowName;
+	
 	
 	public long getReportId() {
 		return reportId;
@@ -235,6 +238,18 @@ public class Report {
 	 */
 	public void setAppName(String appName) {
 		this.appName = appName;
+	}
+	/**
+	 * @return the flowName
+	 */
+	public String getFlowName() {
+		return flowName;
+	}
+	/**
+	 * @param flowName the flowName to set
+	 */
+	public void setFlowName(String flowName) {
+		this.flowName = flowName;
 	}
 	
 	

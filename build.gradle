@@ -59,17 +59,20 @@ dependencies {
     compile "log4j:log4j:1.2.17"
 	
 	compile 'com.force.api:force-wsc:31.0.0'
-	compile 'org.codehaus.jackson:jackson-mapper-asl:1.8.9'
+	compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.13'
 	compile 'org.springframework.boot:spring-boot-starter-data-jpa'
 	compile 'com.ibm.db2.jcc:db2jcc:4.7.112'
-	compile 'com.teradata:terajdbc4:15.10.00.05'
-	compile 'com.teradata:tdgssconfig:15.10.00.05'
+	compile 'com.teradata:terajdbc4:16.20.00.06'
+	compile 'com.teradata:tdgssconfig:16.20.00.06'
 	compile 'com.h2database:h2:1.3.176'
 	compile 'com.microsoft.sqlserver:mssql-jdbc:6.1.0.jre7'
 	compile 'com.microsoft.azure:azure-keyvault:0.9.3'
 	compile 'com.microsoft.azure:adal4j:1.0.0'
 	compile 'com.nimbusds:oauth2-oidc-sdk:4.5'
 	compile 'org.apache.commons:commons-lang3:3.1'
+	compile 'Oracle:Client:12.1'
+	//compile 'com.fasterxml.jackson.core:jackson-core-2.0.1'
+	//compile 'org.codehaus.jackson:jackson-core-asl-1.7.1'
 
 }
   

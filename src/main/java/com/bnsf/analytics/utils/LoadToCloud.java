@@ -16,9 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.SerializationConfig.Feature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +28,12 @@ import com.bnsf.analytics.dataObjects.ObjectData;
 import com.bnsf.analytics.model.Report;
 import com.bnsf.analytics.model.ReportColumn;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize.Inclusion;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.cfg.MapperConfig;
+import com.fasterxml.jackson.databind.introspect.AnnotatedMethod;
 import com.sforce.soap.partner.PartnerConnection;
 import com.sforce.soap.partner.SaveResult;
 import com.sforce.soap.partner.sobject.SObject;
@@ -100,10 +102,12 @@ public class LoadToCloud {
         	if(sv.isSuccess()) {
         		dataSetId = sv.getId();
         	} else {
-        		logger.error("LoadToCloud.createWaveDataSet", sv.getErrors()[0].getFields());
-        	    System.out.println("Error::"+sv.getErrors()[0].getFields());
+        		logger.error("LoadToCloud.createWaveDataSet", sv.getErrors()[0].getMessage());
+        	    System.out.println("Error 1::"+sv.getErrors()[0].getMessage());
+        	    System.out.println("Error 2::"+sv.getErrors()[0].getFields());
         	    String[] errorArray = sv.getErrors()[0].getFields();
-          	    throw new Exception(errorArray[0]);
+        	    System.out.println("Error 3::"+errorArray[0]);
+          	    throw new Exception(sv.getErrors()[0].getMessage());
         	}
         }
         logger.info("End : LoadToCloud.createWaveDataSet");
@@ -134,8 +138,23 @@ public class LoadToCloud {
 		metadata.setObjects(objectList);
 		objectData.setFields(getFieldData(reportColumnList,report.getName()));
 		ObjectMapper mapperObj = new ObjectMapper();
-		mapperObj.configure(Feature.WRITE_NULL_PROPERTIES, false);
-		mapperObj.configure(Feature.INDENT_OUTPUT, true);
+		mapperObj.configure(SerializationFeature.INDENT_OUTPUT, true);
+		//mapperObj.setSerializationInclusion(Include.NON_EMPTY);
+		mapperObj.setPropertyNamingStrategy(new PropertyNamingStrategy() {
+            @Override
+            public String nameForGetterMethod(MapperConfig<?> config, AnnotatedMethod method, String defaultName)
+            {
+                if(method.hasReturnType() && (method.getRawReturnType() == Boolean.class || method.getRawReturnType() == boolean.class)
+                        && method.getName().startsWith("is")) {
+                    return method.getName();
+                }
+                return super.nameForGetterMethod(config, method, defaultName);
+            }
+        });
+		//mapperObj.configure(SerializationFeature., state);
+		//mapperObj.configure(SerializationFeature.
+		//mapperObj.configure(Feature.WRITE_NULL_PROPERTIES, false);
+		//mapperObj.configure(Feature.INDENT_OUTPUT, true);
 		String jsonStr = mapperObj.writeValueAsString(metadata);
 		System.out.println("jsonStr----------->"+jsonStr);
 		logger.info("End : LoadToCloud.generateMetaDatatoLoad");
@@ -264,7 +283,7 @@ public class LoadToCloud {
 	            	logger.error("LoadToCloud.publishDataToWave", sv.getErrors()[0].getFields());
 	        	    System.out.println("Error::"+sv.getErrors()[0].getFields());
 	        	    String[] errorArray = sv.getErrors()[0].getFields();
-	        	    System.out.println("**************** "+ sv.getErrors()[0] +"*******************");
+	        	    //System.out.println("**************** "+ sv.getErrors()[0] +"*******************");
 	            }
 	        }
 		} catch (Exception ex) {

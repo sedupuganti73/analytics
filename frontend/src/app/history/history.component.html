@@ -1,3 +1,55 @@
-<p>
-  history works!
-</p>
+<div class="page-container">
+    <div> <a [routerLink]="['/reports']"  style="text-decoration:none; color: #f44336;">Registered Reports</a> &nbsp;
+      / &nbsp; <p style="display:inline" class="page-title">Report History</p> </div>
+
+      
+  
+  <br><br>
+  
+  <div class="example-container mat-elevation-z8">
+        <mat-progress-bar *ngIf="loading"
+            class="example-margin"
+            color="primary"
+            mode="indeterminate">
+        </mat-progress-bar>
+        <mat-table #table [dataSource]="datasource">
+      
+          <!--- Note that these columns can be defined in any order.
+                The actual rendered columns are set as a property on the row definition" -->
+      
+          <ng-container matColumnDef="message">
+            <mat-header-cell *matHeaderCellDef> Message </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.message}} </mat-cell>
+          </ng-container>
+           
+          <ng-container matColumnDef="startDateStr">
+            <mat-header-cell *matHeaderCellDef> Start Date </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.startDateStr}} </mat-cell>
+          </ng-container>
+      
+          <ng-container matColumnDef="endDateStr">
+              <mat-header-cell *matHeaderCellDef> End Date </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.endDateStr}} </mat-cell>
+          </ng-container>  
+
+          <ng-container matColumnDef="recordCountBefore">
+            <mat-header-cell *matHeaderCellDef> Count Before Run </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.recordCountBefore}} </mat-cell>
+          </ng-container>
+      
+          <ng-container matColumnDef="recordCountAfter">
+            <mat-header-cell *matHeaderCellDef> Count After Run </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.recordCountAfter}} </mat-cell>
+          </ng-container> 
+          
+                      
+       
+          
+  
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+      </div>
+  
+
+    </div>

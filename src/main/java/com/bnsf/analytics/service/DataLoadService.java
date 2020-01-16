@@ -11,7 +11,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +25,7 @@ import com.bnsf.analytics.model.SFDCDataSource;
 import com.bnsf.analytics.utils.DBConnection;
 import com.bnsf.analytics.utils.ReportData;
 import com.bnsf.analytics.utils.Utility;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sforce.soap.partner.PartnerConnection;
 
 @Service
@@ -85,7 +85,7 @@ public class DataLoadService {
 		logger.info("End : DataLoadService.loadData");
 	}
 	
-	public void loadData(Report report) {
+	public PartnerConnection loadData(Report report) {
 		logger.info("Start : DataLoadService.loadData(report)");
 		List<ReportColumn> reportColumnList = null;
 		Connection  dbConnection = null;
@@ -112,6 +112,7 @@ public class DataLoadService {
 			connection.closeConnection(dbConnection);
 		}
 		logger.info("End : DataLoadService.loadData(report)");
+		return partnerConnection;
 	}
 
 	

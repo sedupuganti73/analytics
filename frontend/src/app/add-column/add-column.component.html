@@ -63,6 +63,21 @@
                   Type is <strong>required</strong>
             </mat-error>
           </mat-form-field>
+          
+          <br><br>
+
+          <mat-form-field class="example-full-width" color="accent">
+            <input matInput #columnFormat="ngModel" appCommandValidator placeholder="Precision" [(ngModel)]="precision" name="precision">
+            <mat-hint align="start"><strong>Precision</strong> </mat-hint>
+           
+          </mat-form-field>
+          <br><br>
+
+          <mat-form-field class="example-full-width" color="accent">
+            <input matInput #columnFormat="ngModel" appCommandValidator placeholder="Scale" [(ngModel)]="scale" name="scale">
+            <mat-hint align="start"><strong>Scale</strong> </mat-hint>
+           
+          </mat-form-field>          
         
           <br><br>          
                

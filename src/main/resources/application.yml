@@ -15,17 +15,18 @@ spring:
       ddl-auto: update
     properties:
       hibernate:
-        show_sql: true
+        show_sql: false
         use_sql_comments: true
         format_sql: true
   SFDC:
      url: https://test.salesforce.com/services/Soap/u/36.0
      username: sudarshanrao.edupuganti@bnsf.com.trial
-     password: Test123$1ASixlThZCmbKh7cC4wZFjar3     
+     password: Test987$JJX8sjzSphj6zwlVJ9grIG2vF     
   data:
      path: C:\\Users\\B031526\\Downloads\\dataFolder
-     file-size: 10000000
-     
+     file-size: 9995000
+     write-file: No
+                
 logging:
   level:
     org.springframework.web: ERROR

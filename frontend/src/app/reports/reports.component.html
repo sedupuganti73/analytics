@@ -57,7 +57,7 @@
                   <button mat-mini-fab style="background-color: #18BC9C"  matTooltip="run report" (click)="runReport(element.reportId)">
                     <mat-icon >play_arrow</mat-icon>
                   </button>  
-                  <button mat-mini-fab style="background-color: #69f0ae"  matTooltip="history">
+                  <button mat-mini-fab style="background-color: #69f0ae"  matTooltip="history" [routerLink]="['/history', element.reportId]">
                       <mat-icon >history</mat-icon>
                     </button>    
                   <button mat-mini-fab color="accent" matTooltip="edit report" (click)="addEditReport(element.reportId)">
