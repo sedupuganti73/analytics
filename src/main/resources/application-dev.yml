@@ -1,8 +1,8 @@
  spring:
     datasource:
-       url: jdbc:db2://dsn01d.db.bnsf.com:55000/dsn01d
-       username: NPCRMRW
-       password: rLoa7vFf
+       url: jdbc:db2://123.123.123:55000/dsn01d
+       username: Test
+       password: Test
        driver-class-name: com.ibm.db2.jcc.DB2Driver
     jpa:
       show-sql: true
