@@ -20,7 +20,7 @@ spring:
         format_sql: true
   SFDC:
      url: https://test.salesforce.com/services/Soap/u/36.0
-     username: sudarshanrao.edupuganti@bnsf.com.trial
+     username: sudarshanrao.edupuganti@123.com.trial
      password: Test987$JJX8sjzSphj6zwlVJ9grIG2vF     
   data:
      path: C:\\Users\\B031526\\Downloads\\dataFolder
